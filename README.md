@@ -8,7 +8,7 @@ You can discover PIMGento (API) on the [official website](https://www.pimgento.c
 
 > The [first version](https://github.com/Agence-DnD/PIMGento) of the PIMGento connector will not be maintained anymore.
 
-## Documentation
+### Documentation
 
 PIMGento (API) complete documentation is available [here](doc/summary.md).
 
@@ -16,7 +16,7 @@ You can also watch the video demonstration dedicated to the connector [here](htt
 
 Akeneo API complete documentation is available [here](https://api.akeneo.com/).
 
-## How it works
+### How it works
 
 PIMGento (API) fetches data from Akeneo API and insert data directly in Magento database.
 
@@ -32,7 +32,7 @@ With PIMGento (API) , you can import :
 * Products
 * Assets (Magento EE & Akeneo >= 2.0)
 
-## Requirements
+### Requirements
 
 * Akeneo PIM >= 2.0 (CE & EE)
 * Magento >= 1.9 CE
