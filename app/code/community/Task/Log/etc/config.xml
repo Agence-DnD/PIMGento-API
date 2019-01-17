@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Config
+ * @package   Task_Log
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+-->
+<config>
+    <modules>
+        <Task_Log>
+            <version>0.1.0</version>
+        </Task_Log>
+    </modules>
+    <global>
+        <blocks>
+            <task_log>
+                <class>Task_Log_Block</class>
+            </task_log>
+        </blocks>
+        <helpers>
+            <task_log>
+                <class>Task_Log_Helper</class>
+            </task_log>
+        </helpers>
+        <models>
+            <task_log>
+                <class>Task_Log_Model</class>
+                <resourceModel>task_log_resource</resourceModel>
+            </task_log>
+            <task_log_resource>
+                <class>Task_Log_Model_Resource</class>
+                <entities>
+                    <task>
+                        <table>task_executor_log_task</table>
+                    </task>
+                    <step>
+                        <table>task_executor_log_step</table>
+                    </step>
+                </entities>
+            </task_log_resource>
+        </models>
+        <resources>
+            <task_log_setup>
+                <setup>
+                    <module>Task_Log</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </task_log_setup>
+        </resources>
+        <events>
+            <task_executor_start>
+                <observers>
+                    <task_log_task_start>
+                        <class>task_log/observer</class>
+                        <method>startTask</method>
+                    </task_log_task_start>
+                </observers>
+            </task_executor_start>
+            <task_executor_end>
+                <observers>
+                    <task_log_task_end>
+                        <class>task_log/observer</class>
+                        <method>endTask</method>
+                    </task_log_task_end>
+                </observers>
+            </task_executor_end>
+            <task_executor_step_start>
+                <observers>
+                    <task_log_step_start>
+                        <class>task_log/observer</class>
+                        <method>startStep</method>
+                    </task_log_step_start>
+                </observers>
+            </task_executor_step_start>
+            <task_executor_step_end>
+                <observers>
+                    <task_log_step_end>
+                        <class>task_log/observer</class>
+                        <method>endStep</method>
+                    </task_log_step_end>
+                </observers>
+            </task_executor_step_end>
+            <task_executor_error>
+                <observers>
+                    <task_log_task_error>
+                        <class>task_log/observer</class>
+                        <method>error</method>
+                    </task_log_task_error>
+                </observers>
+            </task_executor_error>
+        </events>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Task_Log before="Mage_Adminhtml">Task_Log_Adminhtml</Task_Log>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <task_log>
+                    <file>task/log.xml</file>
+                </task_log>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Task_Log>
+                    <files>
+                        <default>Task_Log.csv</default>
+                    </files>
+                </Task_Log>
+            </modules>
+        </translate>
+    </adminhtml>
+</config>

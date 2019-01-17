@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Config
+ * @package   Task_Executor
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+-->
+<layout version="0.1.0">
+
+    <adminhtml_task_executor_index>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addCss"><name>task/executor/css/style.css</name></action>
+            <action method="addItem"><type>skin_js</type><name>task/executor/js/script.js</name></action>
+        </reference>
+        <reference name="content">
+            <block type="task_executor/adminhtml_task_view" name="task.executor.view" template="task/executor/view.phtml" />
+        </reference>
+    </adminhtml_task_executor_index>
+
+    <adminhtml_task_executor_options>
+        <block type="task_executor/adminhtml_task_view_options" name="task.executor.options" template="task/executor/view/options.phtml" output="toHtml" />
+    </adminhtml_task_executor_options>
+
+</layout>

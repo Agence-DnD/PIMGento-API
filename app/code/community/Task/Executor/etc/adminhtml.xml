@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Config
+ * @package   Task_Example
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+-->
+<config>
+    <menu>
+        <task translate="title" module="task_executor">
+            <title>Tasks</title>
+            <sort_order>1000</sort_order>
+            <children>
+                <executor translate="title" module="task_executor">
+                    <title>Executor</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/task_executor</action>
+                </executor>
+            </children>
+        </task>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <task translate="title" module="task_executor">
+                        <title>Tasks</title>
+                        <sort_order>1000</sort_order>
+                        <children>
+                            <executor translate="title" module="task_executor">
+                                <title>Executor</title>
+                                <sort_order>1</sort_order>
+                            </executor>
+                        </children>
+                    </task>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

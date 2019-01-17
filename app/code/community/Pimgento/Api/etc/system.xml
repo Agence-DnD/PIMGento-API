@@ -1,0 +1,578 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Config
+ * @package   Pimgento_Api
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.pimgento.com/
+ */
+-->
+<config>
+    <sections>
+        <pimgento_api translate="label" module="pimgento_api">
+            <label>Pimgento API</label>
+            <tab>catalog</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>9000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general>
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <version translate="label">
+                            <label>Extension Version</label>
+                            <frontend_model>pimgento_api/adminhtml_system_config_version</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </version>
+                        <akeneo_version translate="label comment">
+                            <label>Version</label>
+                            <comment>Akeneo Version</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_version</source_model>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </akeneo_version>
+                        <pagination_size translate="label comment">
+                            <label>Pagination size</label>
+                            <comment>Must be a value between 1 and 100. Default value is 10.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </pagination_size>
+                        <admin_channel translate="label comment">
+                            <label>Admin Website Channel</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Set Magento Admin website default Pim channel</comment>
+                            <validate>required-entry</validate>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </admin_channel>
+                        <website_mapping translate="label comment">
+                            <label>Website mapping</label>
+                            <frontend_model>pimgento_api/adminhtml_system_website</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <comment>Match Magento website with Pim channel</comment>
+                            <validate>required-entry validate-one-required</validate>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </website_mapping>
+                    </fields>
+                </general>
+                <credentials translate="label" module="pimgento_api">
+                    <label>API Credentials</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <base_url translate="label comment">
+                            <label>Base Url</label>
+                            <comment>Akeneo Url</comment>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <validate>required-entry validate-url</validate>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </base_url>
+                        <client_id translate="label comment">
+                            <label>Client ID</label>
+                            <comment>Found in your Akeneo configuration : System / API connections</comment>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </client_id>
+                        <secret translate="label comment">
+                            <label>Secret</label>
+                            <comment>Found in your Akeneo configuration : System / API connections</comment>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <validate>required-entry</validate>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </secret>
+                        <user translate="label comment">
+                            <label>User</label>
+                            <comment>Your Akeneo User Name</comment>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <validate>required-entry</validate>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </user>
+                        <pass translate="label comment">
+                            <label>Password</label>
+                            <comment>Your Akeneo User Password</comment>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <validate>required-entry</validate>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </pass>
+                        <api_test translate="label">
+                            <label>Test API credentials</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>pimgento_api/adminhtml_system_config_api_check</frontend_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_test>
+                    </fields>
+                </credentials>
+                <category translate="label">
+                    <label>Category Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <reindex translate="label comment">
+                            <label>Reindex Data</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Magento versions greater than EE 1.13 have asynchronous indexing, index can be disabled</comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </reindex>
+                        <clear_cache translate="label comment">
+                            <label>Clear cache</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Clear cache after each import</comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </clear_cache>
+                        <cache_list translate="label">
+                            <label>Cache Selection</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>pimgento_api/system_config_source_cache_type</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cache_list>
+                    </fields>
+                </category>
+                <attribute translate="label">
+                    <label>Attribute Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <reindex translate="label comment">
+                            <label>Reindex Data</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Magento versions greater than EE 1.13 have asynchronous indexing, index can be disabled</comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </reindex>
+                        <clear_cache translate="label comment">
+                            <label>Clear cache</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Clear cache after each import</comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </clear_cache>
+                        <cache_list translate="label">
+                            <label>Cache Selection</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>pimgento_api/system_config_source_cache_type</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cache_list>
+                        <additional_types translate="label comment">
+                            <label>Additional types</label>
+                            <comment>Match specific Pim attribute type with Magento any default field type</comment>
+                            <frontend_model>pimgento_api/adminhtml_system_type</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </additional_types>
+                        <prefix_reserved translate="label comment">
+                            <label>Prefix reserved attributes</label>
+                            <comment>Add 'pim_' prefix to attribute codes reserved by Magento. If disabled reserved attributes will be ignored (e.g.: collection)</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </prefix_reserved>
+                    </fields>
+                </attribute>
+                <option translate="label">
+                    <label>Attribute Option Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <reindex translate="label comment">
+                            <label>Reindex Data</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Magento versions greater than EE 1.13 have asynchronous indexing, index can be disabled</comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </reindex>
+                        <clear_cache translate="label comment">
+                            <label>Clear cache</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Clear cache after each import</comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </clear_cache>
+                        <cache_list translate="label">
+                            <label>Cache Selection</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>pimgento_api/system_config_source_cache_type</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cache_list>
+                    </fields>
+                </option>
+                <product translate="label">
+                    <label>Product Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <attribute_mapping translate="label comment">
+                            <label>Attributes Mapping</label>
+                            <frontend_model>pimgento_api/adminhtml_system_attribute</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <comment>Example: description > meta_description</comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_mapping>
+                        <tax_id translate="label">
+                            <label>Default Tax Class</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_tax</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </tax_id>
+                        <configurable_attributes translate="label comment">
+                            <label>Configurable attributes</label>
+                            <frontend_model>pimgento_api/adminhtml_system_configurable</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <comment>Fill configurable attributes with default value, leave blank to take simple product value or Product Model value if exists</comment>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </configurable_attributes>
+                        <image_enabled translate="label">
+                            <label>Import Media Files</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </image_enabled>
+                        <image_gallery_attributes translate="label comment">
+                            <label>PIM Images Attributes</label>
+                            <frontend_model>pimgento_api/adminhtml_system_gallery</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <comment>PIM attributes to use for product gallery</comment>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <image_enabled>1</image_enabled>
+                            </depends>
+                        </image_gallery_attributes>
+                        <image_images_attributes translate="label comment">
+                            <label>Product Images Mapping</label>
+                            <frontend_model>pimgento_api/adminhtml_system_image</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <comment>PIM attributes to use for main images</comment>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <image_enabled>1</image_enabled>
+                            </depends>
+                        </image_images_attributes>
+                        <asset_enabled translate="label">
+                            <label>Import Asset Files</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </asset_enabled>
+                        <asset_gallery_attributes translate="label comment">
+                            <label>PIM Asset Attributes</label>
+                            <frontend_model>pimgento_api/adminhtml_system_asset</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <comment>PIM attributes to use for product gallery</comment>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <asset_enabled>1</asset_enabled>
+                            </depends>
+                        </asset_gallery_attributes>
+                        <reindex translate="label comment">
+                            <label>Reindex Data</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Magento versions greater than EE 1.13 have asynchronous indexing, index can be disabled</comment>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </reindex>
+                        <clear_cache translate="label comment">
+                            <label>Clear cache</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Clear cache after each import</comment>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </clear_cache>
+                        <cache_list translate="label">
+                            <label>Cache Selection</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>pimgento_api/system_config_source_cache_type</source_model>
+                            <sort_order>101</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cache_list>
+                    </fields>
+                </product>
+                <products_filters translate="label">
+                    <label>Product Filters</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>70</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <mode translate="label">
+                            <label>Mode</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_mode</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </mode>
+                        <completeness_enabled translate="label">
+                            <label>Completeness</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                            </depends>
+                        </completeness_enabled>
+                        <completeness_scope translate="label comment">
+                            <label>Completeness Channel</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_channel</source_model>
+                            <comment>Select the channel to apply the completeness filter on</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <completeness_enabled>1</completeness_enabled>
+                                <mode>standard</mode>
+                            </depends>
+                        </completeness_scope>
+                        <completeness_type translate="label">
+                            <label>Completeness type</label>
+                            <sort_order>40</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_completeness</source_model>
+                            <can_be_empty>0</can_be_empty>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <completeness_enabled>1</completeness_enabled>
+                                <mode>standard</mode>
+                            </depends>
+                        </completeness_type>
+                        <completeness_locales translate="label comment">
+                            <label>Completeness Locales</label>
+                            <sort_order>50</sort_order>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_locales</source_model>
+                            <comment>Select the locales to apply the completeness filter on</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <completeness_enabled>1</completeness_enabled>
+                                <completeness_type separator=","><![CDATA[GREATER THAN ON ALL LOCALES,GREATER OR EQUALS THAN ON ALL LOCALES,LOWER THAN ON ALL LOCALES,LOWER OR EQUALS THAN ON ALL LOCALES]]></completeness_type>
+                                <mode>standard</mode>
+                            </depends>
+                        </completeness_locales>
+                        <completeness_value translate="label comment">
+                            <label>Completeness value</label>
+                            <sort_order>60</sort_order>
+                            <comment>Has to be a value between 0 and 100</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <completeness_enabled>1</completeness_enabled>
+                                <mode>standard</mode>
+                            </depends>
+                        </completeness_value>
+                        <status translate="label">
+                            <label>Status</label>
+                            <sort_order>70</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_status</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                            </depends>
+                        </status>
+                        <updated translate="label comment">
+                            <label>Updated</label>
+                            <sort_order>80</sort_order>
+                            <comment>
+                                <![CDATA[Import only product updated since last X days. Leave blank for no filter.]]>
+                            </comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                            </depends>
+                        </updated>
+                        <families translate="label comment">
+                            <label>Families</label>
+                            <sort_order>90</sort_order>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_family</source_model>
+                            <comment>
+                                <![CDATA[Select the families you don't want to retrieve products from.<br/> If the multiselect is empty, it means you don't have any families in your Akeneo, or the provided credentials are wrong.]]>
+                            </comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                            </depends>
+                        </families>
+                        <advanced_filter translate="label comment">
+                            <label>Advanced Filter</label>
+                            <sort_order>100</sort_order>
+                            <frontend_type>textarea</frontend_type>
+                            <comment>
+                                <![CDATA[Build your query using a json.<br/>
+    For example :<br/>
+    <pre>
+    {
+        "search": {
+            "enabled": [{
+                "operator": "=",
+                "value": true
+            }],
+            "sku": [{
+                "operator": "STARTS WITH",
+                "value": "A"
+            }]
+        },
+        "scope": "ecommerce",
+        "locales": "fr_FR,de_DE"
+    }</pre>]]>
+                            </comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>advanced</mode>
+                            </depends>
+                        </advanced_filter>
+                    </fields>
+                </products_filters>
+            </groups>
+        </pimgento_api>
+    </sections>
+</config>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Config
+ * @package   Task_Log
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+-->
+<layout version="0.1.0">
+
+    <adminhtml_task_log_index>
+        <reference name="head">
+            <action method="addCss"><name>task/log/css/style.css</name></action>
+        </reference>
+        <reference name="content">
+            <block type="task_log/adminhtml_task_log" name="task.log.grid" />
+        </reference>
+    </adminhtml_task_log_index>
+
+    <adminhtml_task_log_view>
+        <reference name="head">
+            <action method="addCss"><name>task/executor/css/style.css</name></action>
+        </reference>
+        <reference name="content">
+            <block type="task_log/adminhtml_task_log_view" name="task.log.view" template="task/log/view.phtml" />
+        </reference>
+    </adminhtml_task_log_view>
+
+</layout>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Config
+ * @package   Pimgento_Api
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.pimgento.com/
+ */
+-->
+<config>
+    <menu>
+        <task translate="title" module="pimgento_api">
+            <title>Pimgento</title>
+            <children>
+                <executor translate="title" module="pimgento_api">
+                    <title>Imports</title>
+                </executor>
+                <configuration translate="title" module="pimgento_api">
+                    <title>Configuration</title>
+                    <sort_order>3</sort_order>
+                    <action>adminhtml/system_config/edit/section/pimgento_api</action>
+                </configuration>
+            </children>
+        </task>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <pimgento_api translate="title" module="pimgento_api">
+                                        <title>Pimgento API</title>
+                                    </pimgento_api>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

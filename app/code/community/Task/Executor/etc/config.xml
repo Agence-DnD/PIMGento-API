@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Config
+ * @package   Task_Example
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+-->
+<config>
+    <modules>
+        <Task_Executor>
+            <version>0.2.0</version>
+        </Task_Executor>
+    </modules>
+    <global>
+        <models>
+            <task_executor>
+                <class>Task_Executor_Model</class>
+            </task_executor>
+        </models>
+        <blocks>
+            <task_executor>
+                <class>Task_Executor_Block</class>
+            </task_executor>
+        </blocks>
+        <helpers>
+            <task_executor>
+                <class>Task_Executor_Helper</class>
+            </task_executor>
+        </helpers>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Task_Executor before="Mage_Adminhtml">Task_Executor_Adminhtml</Task_Executor>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <task_executor>
+                    <file>task/executor.xml</file>
+                </task_executor>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Task_Executor>
+                    <files>
+                        <default>Task_Executor.csv</default>
+                    </files>
+                </Task_Executor>
+            </modules>
+        </translate>
+    </adminhtml>
+</config>

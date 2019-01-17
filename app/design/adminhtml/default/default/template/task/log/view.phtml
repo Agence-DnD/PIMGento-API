@@ -1,0 +1,51 @@
+<?php
+/**
+ * @category  Template
+ * @package   Task_Log
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+?>
+<?php $task = $this->getTask() ?>
+
+<?php if(!$this->getDisabledTitle()): ?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;">
+                <h3 class="icon-head head-task"><?php echo $this->getHeader() ?></h3>
+                <div class="content-buttons-placeholder">
+                    <p class="content-buttons form-buttons">
+                        <?php echo $this->getBackButtonHtml() ?>
+                    </p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<?php endif; ?>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo $this->__('Task #%s', $task->getId()) ?>
+        </h4>
+    </div>
+    <fieldset>
+        <legend><?php echo $this->__('Console') ?></legend>
+        <table cellspacing="0" class="task-executor">
+            <tr>
+                <td>
+                    <ul id="task-console" class="task-console">
+                        <li class="step-line">
+                            # <?php echo $task->getCommand() ?>
+                        </li>
+                        <?php echo $this->renderStepsMessages() ?>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
