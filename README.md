@@ -4,13 +4,16 @@
 
 PIMGento (API) is a Magento extension that allows you to import your catalog from Akeneo API into Magento.
 
-You can discover PIMGento (API) on the official website (https://www.pimgento.com/).
+You can discover PIMGento (API) on the [official website](https://www.pimgento.com/).
 
-> This version is replacing the old PIMGento connector (https://github.com/Agence-DnD/PIMGento).
+> The [first version](https://github.com/Agence-DnD/PIMGento) of the PIMGento connector will not be maintained anymore.
 
 ## Documentation
 
 PIMGento (API) complete documentation is available [here](doc/summary.md).
+
+You can also watch the video demonstration dedicated to the connector [here](https://youtu.be/nDCly34gWjk).
+
 Akeneo API complete documentation is available [here](https://api.akeneo.com/).
 
 ## How it works
