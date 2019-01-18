@@ -54,6 +54,14 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
      * @var string[] $columnNames
      */
     protected $columnNames = [];
+    /**
+     * Product attributes to pass if empty value
+     *
+     * @var string[] $passIfEmpty
+     */
+    protected $passIfEmpty = [
+        'price',
+    ];
 
     /**
      * Resource initialization
@@ -87,6 +95,16 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
         $this->entityCode = $entityCode;
 
         return $this;
+    }
+
+    /**
+     * Retrieve attributes to pass if empty value
+     *
+     * @return string[]
+     */
+    public function getPassIfEmpty()
+    {
+        return $this->passIfEmpty;
     }
 
     /**
@@ -591,7 +609,7 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
                 continue;
             }
 
-            if ($attribute['backend_type'] === 'static') {
+            if (empty($attribute['backend_type']) || $attribute['backend_type'] === 'static') {
                 continue;
             }
 
@@ -609,10 +627,8 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
 
             /** @var bool $columnExists */
             $columnExists = $this->columnExists($tableName, $value);
-            /** @var int $productEntityTypeId */
-            $productEntityTypeId = Mage::helper('pimgento_api/entities')->getProductEntityTypeId();
-            if ($columnExists && $entityCode !== self::ENTITY_CODE_PRODUCT && $entityTypeId !== $productEntityTypeId) {
-                $select->where(sprintf('TRIM(`%s`) <> ?', $value), new Zend_Db_Expr('""'));
+            if ($columnExists && ($entityCode !== self::ENTITY_CODE_PRODUCT || in_array($code, $this->getPassIfEmpty()))) {
+                $select->where(sprintf('TRIM(`%s`) > ?', $value), new Zend_Db_Expr('""'));
             }
 
             /** @var string $backendType */
