@@ -50,4 +50,4 @@ You can consult our roadmap [here](doc/important_stuff/roadmap.md).
 
 ### About us
 
-Founded by lovers of innovation and design, [Agence Dn'D](https://www.dnd.fr) assists companies for 11 years in the creation and development of customized digital (open source) solutions for web and E-commerce.
+Founded by lovers of innovation and design, [Agence Dn'D](https://www.dnd.fr) assists companies in the creation and development of customized digital (open source) solutions for web and E-commerce since 2004.
