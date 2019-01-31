@@ -1350,10 +1350,11 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                     }
                     /** @var mixed[] $data */
                     $data = [
-                        'attribute_id' => $column['attribute'],
-                        'store_id'     => 0,
-                        'entity_id'    => $row['entity_id'],
-                        'value'        => $file,
+                        'attribute_id'   => $column['attribute'],
+                        'store_id'       => 0,
+                        'entity_id'      => $row['entity_id'],
+                        'entity_type_id' => new Zend_Db_Expr($this->getProductEntityTypeId()),
+                        'value'          => $file,
                     ];
                     $connection->insertOnDuplicate($productImageTable, $data, array_keys($data));
                 }
