@@ -16,5 +16,5 @@ Contributing policy
 
 **You can not commit directly on this repository.**
 
-Fork the project, create a feature branch, and send a pull request.
+Fork the project, create a feature branch, and send a pull request on the develop branch.
 

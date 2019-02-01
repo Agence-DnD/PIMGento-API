@@ -49,6 +49,30 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
      * @var string[]
      */
     protected $allowedTypeId = ['simple', 'virtual'];
+    /**
+     * List of column to exclude from attribute value setting
+     *
+     * @var string[]
+     */
+    protected $excludedColumns = [
+        '_entity_id',
+        '_is_new',
+        '_status',
+        '_type_id',
+        '_options_container',
+        '_tax_class_id',
+        '_attribute_set_id',
+        '_visibility',
+        '_children',
+        '_axes',
+        'code',
+        'sku',
+        'categories',
+        'family',
+        'groups',
+        'parent',
+        'enabled',
+    ];
 
     /**
      * Pimgento_Api_Model_Job_Product constructor
@@ -250,7 +274,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
 
         if ($connection->tableColumnExists($tmpTable, 'type_id')) {
             /** @var string $types */
-            $types = $connection->quote($this->allowedTypeId);
+            $types = $connection->quote($this->getAllowedTypeId());
             $connection->update(
                 $tmpTable,
                 [
@@ -543,25 +567,9 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
         $columns = array_keys($connection->describeTable($tmpTable));
         /** @var string[] $except */
         $except = [
-            '_entity_id',
-            '_is_new',
-            '_status',
-            '_type_id',
-            '_options_container',
-            '_tax_class_id',
-            '_attribute_set_id',
-            '_visibility',
-            '_children',
-            '_axes',
-            'code',
-            'sku',
-            'categories',
-            'family',
-            'groups',
-            'parent',
             'url_key',
-            'enabled',
         ];
+        $except = array_merge($except, $this->getExcludedColumns());
 
         /** @var string $column */
         foreach ($columns as $column) {
@@ -691,25 +699,6 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
         $stores = $storeHelper->getAllStores();
         /** @var string[] $columns */
         $columns = array_keys($connection->describeTable($tmpTable));
-        /** @var string[] $except */
-        $except = [
-            '_entity_id',
-            '_is_new',
-            '_status',
-            '_type_id',
-            '_options_container',
-            '_tax_class_id',
-            '_attribute_set_id',
-            '_visibility',
-            '_children',
-            '_axes',
-            'sku',
-            'categories',
-            'family',
-            'groups',
-            'parent',
-            'enabled',
-        ];
         /** @var mixed[] $values */
         $values = [
             0 => [
@@ -725,7 +714,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
 
         /** @var string $column */
         foreach ($columns as $column) {
-            if (in_array($column, $except) || preg_match('/-unit/', $column)) {
+            if (in_array($column, $this->getExcludedColumns()) || preg_match('/-unit/', $column)) {
                 continue;
             }
 
@@ -1350,10 +1339,11 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                     }
                     /** @var mixed[] $data */
                     $data = [
-                        'attribute_id' => $column['attribute'],
-                        'store_id'     => 0,
-                        'entity_id'    => $row['entity_id'],
-                        'value'        => $file,
+                        'attribute_id'   => $column['attribute'],
+                        'store_id'       => 0,
+                        'entity_id'      => $row['entity_id'],
+                        'entity_type_id' => new Zend_Db_Expr($this->getProductEntityTypeId()),
+                        'value'          => $file,
                     ];
                     $connection->insertOnDuplicate($productImageTable, $data, array_keys($data));
                 }
@@ -1627,7 +1617,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
     }
 
     /**
-     * Retrieve product entity type id
+     * Retrieve product default attribute set id
      *
      * @return int
      */
@@ -1637,5 +1627,15 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
         $entitiesHelper = Mage::helper('pimgento_api/entities');
 
         return $entitiesHelper->getProductDefaultAttributeSetId();
+    }
+
+    /**
+     * Retrieve excluded columns
+     *
+     * @return string[]
+     */
+    public function getExcludedColumns()
+    {
+        return $this->excludedColumns;
     }
 }
