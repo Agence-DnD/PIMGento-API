@@ -97,7 +97,7 @@ class Pimgento_Api_Model_Job_Attribute extends Pimgento_Api_Model_Job_Abstract
          */
         foreach ($attributes as $index => $attribute) {
             /** @var string $attributeCode */
-            $attributeCode = $attribute['code'];
+            $attributeCode = strtolower($attribute['code']);
             /** @var int $id */
             if ($attributeHelper->isAttributeCodeReserved($attributeCode)) {
                 if (!$isPrefixEnabled) {
@@ -107,9 +107,9 @@ class Pimgento_Api_Model_Job_Attribute extends Pimgento_Api_Model_Job_Abstract
 
                     continue;
                 }
-
-                $attribute['code'] = Pimgento_Api_Helper_Attribute::RESERVED_ATTRIBUTE_CODE_PREFIX . $attributeCode;
+                $attributeCode = Pimgento_Api_Helper_Attribute::RESERVED_ATTRIBUTE_CODE_PREFIX . $attributeCode;
             }
+            $attribute['code'] = $attributeCode;
             /** @var string[] $columns */
             $columns = $entitiesHelper->getColumnsFromResult($attribute);
             /** @var bool $result */
