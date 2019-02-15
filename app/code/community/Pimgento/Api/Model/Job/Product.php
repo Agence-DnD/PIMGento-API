@@ -72,6 +72,13 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
         'groups',
         'parent',
         'enabled',
+        'created',
+        'updated',
+        'associations',
+        'PACK',
+        'SUBSTITUTION',
+        'UPSELL',
+        'X_SELL',
     ];
 
     /**
