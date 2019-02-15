@@ -25,6 +25,7 @@
 "Pimgento_Api::Associate values to options","Association des valeurs aux options"
 "Pimgento_Api::Attribute %s skipped because of reserved Magento code","Attribut %s passé car son code est réservé par Magento"
 "Pimgento_Api::Attribute %s skipped because of system reserved attribute code","Attribut %s passé car son code est réservé par le système"
+"Pimgento_Api::Attribute %s was not found. Please try re-importing attributes.","L'attribut %s n'a pas été trouvé. Veuillez essayer de ré-importer les attributs."
 "Pimgento_Api::Attribute code %s is reserved, options bypassed","Le code attribut %s est réservé, ses options ont été ignorées"
 "Pimgento_Api::Attribute Option Settings","Réglages des options d'attributs"
 "Pimgento_Api::Attribute Options","Options d'attribut"

@@ -588,10 +588,10 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                 continue;
             }
 
-            /** @var string[] $columnPrefix */
-            $columnPrefix = explode('-', $column);
+            /** @var string[] $columnParts */
+            $columnParts = explode('-', $column, 2);
             /** @var string $columnPrefix */
-            $columnPrefix = reset($columnPrefix);
+            $columnPrefix = reset($columnParts);
             $columnPrefix = sprintf('%s_', $columnPrefix);
             /** @var int $prefixLength */
             $prefixLength = strlen($columnPrefix) + 1;
@@ -700,12 +700,16 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
         $connection = $resourceEntities->getReadConnection();
         /** @var string $tmpTable */
         $tmpTable = $resourceEntities->getTableName();
+        /** @var string[] $attributeScopeMapping */
+        $attributeScopeMapping = $resourceEntities->getAttributeScopeMapping();
         /** @var Pimgento_Api_Helper_Store $storeHelper */
         $storeHelper = Mage::helper('pimgento_api/store');
         /** @var mixed[] $stores */
         $stores = $storeHelper->getAllStores();
         /** @var string[] $columns */
         $columns = array_keys($connection->describeTable($tmpTable));
+        /** @var string $adminBaseCurrency */
+        $adminBaseCurrency = Mage::app()->getBaseCurrencyCode();
         /** @var mixed[] $values */
         $values = [
             0 => [
@@ -721,35 +725,70 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
 
         /** @var string $column */
         foreach ($columns as $column) {
-            if (in_array($column, $this->getExcludedColumns()) || preg_match('/-unit/', $column)) {
+            /** @var string[] $columnParts */
+            $columnParts = explode('-', $column, 2);
+            /** @var string $columnPrefix */
+            $columnPrefix = $columnParts[0];
+
+            if (in_array($columnPrefix, $this->getExcludedColumns()) || preg_match('/-unit/', $column)) {
                 continue;
             }
 
-            /** @var string[] $columnPrefix */
-            $columnPrefix = explode('-', $column);
-            /** @var string $columnPrefix */
-            $columnPrefix = reset($columnPrefix);
+            if (!isset($attributeScopeMapping[$columnPrefix])) {
+                // If no scope is found, attribute does not exist
+                $task->setStepWarning($this->getHelper()->__('Attribute %s was not found. Please try re-importing attributes.', $columnPrefix));
 
-            /**
-             * @var string  $suffix
-             * @var mixed[] $affected
-             */
-            foreach ($stores as $suffix => $affected) {
-                if (!preg_match(sprintf('/^%s-%s$/', $columnPrefix, $suffix), $column)) {
+                continue;
+            }
+
+            if (empty($columnParts[1]) && !isset($values[0][$columnPrefix])) {
+                // No channel and no locale found: attribute scope naturally is Global
+                $values[0][$columnPrefix] = $column;
+
+                continue;
+            }
+
+            /** @var int $scope */
+            $scope = (int)$attributeScopeMapping[$columnPrefix];
+            if ($scope === Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL && !empty($columnParts[1]) && $columnParts[1] === $adminBaseCurrency) {
+                // This attribute has global scope with a suffix: it is a price with its currency
+                // Only set this Price value if currency matches default Magento currency
+                // If Price scope is set to Website, it will be processed afterwards as any website scoped attribute
+                $values[0][$columnPrefix] = $column;
+
+                continue;
+            }
+
+            /** @var string $columnSuffix */
+            $columnSuffix = $columnParts[1];
+            if (!isset($stores[$columnSuffix])) {
+                // No corresponding store found for this suffix
+                $task->setStepWarning($this->getHelper()->__('Column %s was ignored and passed.', $column));
+
+                continue;
+            }
+
+            /** @var mixed[] $affectedStores */
+            $affectedStores = $stores[$columnSuffix];
+            /** @var mixed[] $store */
+            foreach ($affectedStores as $store) {
+                // Handle website scope
+                if ($scope === Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE && !$store['is_website_default']) {
                     continue;
                 }
 
-                /** @var mixed[] $store */
-                foreach ($affected as $store) {
-                    if (!isset($values[$store['store_id']])) {
-                        $values[$store['store_id']] = [];
-                    }
+                if ($scope === Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE || empty($store['siblings'])) {
                     $values[$store['store_id']][$columnPrefix] = $column;
-                }
-            }
 
-            if (!isset($values[0][$columnPrefix])) {
-                $values[0][$columnPrefix] = $column;
+                    continue;
+                }
+
+                /** @var string[] $siblings */
+                $siblings = $store['siblings'];
+                /** @var string $storeId */
+                foreach ($siblings as $storeId) {
+                    $values[$storeId][$columnPrefix] = $column;
+                }
             }
         }
 
