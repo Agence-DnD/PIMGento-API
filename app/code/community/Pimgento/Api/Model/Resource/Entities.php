@@ -62,6 +62,12 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
     protected $passIfEmpty = [
         'price',
     ];
+    /**
+     * Mapped catalog attributes with relative scope
+     *
+     * @var string[] $attributeScopeMapping
+     */
+    protected $attributeScopeMapping = [];
 
     /**
      * Resource initialization
@@ -688,6 +694,61 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
         }
 
         return $attribute;
+    }
+
+    /**
+     * Retrieve catalog attributes mapped with relative scope
+     *
+     * @return string[]
+     */
+    public function getAttributeScopeMapping()
+    {
+        if (!empty($this->attributeScopeMapping)) {
+            return $this->attributeScopeMapping;
+        }
+
+        /** @var Mage_Core_Model_Resource $resource */
+        $resource = Mage::getModel('core/resource');
+        /** @var Varien_Db_Adapter_Interface $connection */
+        $connection = $resource->getConnection('read');
+        /** @var string $catalogAttribute */
+        $catalogAttribute = $resource->getTableName('catalog/eav_attribute');
+        /** @var string $eavAttribute */
+        $eavAttribute = $resource->getTableName('eav/attribute');
+        /** @var Varien_Db_Select $select */
+        $select = $connection->select()->from(['a' => $eavAttribute], ['attribute_code'])->joinInner(['c' => $catalogAttribute], 'c.attribute_id = a.attribute_id', ['is_global']);
+
+        /** @var string[] $attributeScopes */
+        $attributeScopes = $connection->fetchPairs($select);
+        if (!empty($attributeScopes)) {
+            $attributeScopes             = array_merge($attributeScopes, $this->getPriceScopeMapping());
+            $this->attributeScopeMapping = $attributeScopes;
+        }
+
+        return $this->attributeScopeMapping;
+    }
+
+    /**
+     * Get Price scope
+     * Depending on Mage_Catalog_Helper_Data::XML_PATH_PRICE_SCOPE config
+     *
+     * @return string[]
+     */
+    public function getPriceScopeMapping()
+    {
+        /** @var string[] $mapping */
+        $mapping = [
+            'price' => (string)Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
+        ];
+        /** @var Mage_Catalog_Helper_Data $helper */
+        $helper = Mage::helper('catalog');
+        /** @var bool $isGlobal */
+        $isGlobal = $helper->isPriceGlobal();
+        if (!$isGlobal) {
+            $mapping['price'] = (string)Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE;
+        }
+
+        return $mapping;
     }
 
     /**

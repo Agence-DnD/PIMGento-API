@@ -28,6 +28,8 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
 
         /** @var mixed[] $data */
         $data = [];
+        /** @var string[] $websiteDefaultStores */
+        $websiteDefaultStores = $this->getWebsiteDefaultStores(true);
         /** @var Pimgento_Api_Helper_Configuration $configHelper */
         $configHelper = $this->getConfigurationHelper();
         /** @var mixed[] $mapping */
@@ -49,20 +51,36 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
                 continue;
             }
 
+            /** @var string $currency */
+            $currency = $website->getBaseCurrencyCode();
+            /** @var string[] $siblings */
+            $siblings = $website->getStoreIds();
             /** @var Mage_Core_Model_Store[] $store */
             $stores = $website->getStores();
             /** @var Mage_Core_Model_Store $store */
             foreach ($stores as $store) {
+                /** @var int $storeId */
+                $storeId = $store->getId();
+                /** @var string $storeCode */
+                $storeCode = $store->getCode();
+                /** @var string $storeLang */
+                $storeLang = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE, $storeId);
+                /** @var bool $isDefault */
+                $isDefault = false;
+                if (in_array($storeId, $websiteDefaultStores)) {
+                    $isDefault = true;
+                }
+
                 /** @var mixed[] $combine */
                 $combine = [];
                 /** @var string $key */
                 foreach ($arrayKey as $key) {
                     switch ($key) {
                         case 'store_id':
-                            $combine[] = $store->getId();
+                            $combine[] = $storeId;
                             break;
                         case 'store_code':
-                            $combine[] = $store->getCode();
+                            $combine[] = $storeCode;
                             break;
                         case 'website_id':
                             $combine[] = $websiteId;
@@ -74,16 +92,13 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
                             $combine[] = $channel;
                             break;
                         case 'lang':
-                            $combine[] = Mage::getStoreConfig(
-                                Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE,
-                                $store->getId()
-                            );
+                            $combine[] = $storeLang;
                             break;
                         case 'currency':
-                            $combine[] = $store->getDefaultCurrencyCode();
+                            $combine[] = $currency;
                             break;
                         default:
-                            $combine[] = $store->getId();
+                            $combine[] = $storeId;
                             break;
                     }
                 }
@@ -92,16 +107,15 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
                 $key = implode('-', $combine);
 
                 $data[$key][] = [
-                    'store_id'     => $store->getId(),
-                    'store_code'   => $store->getCode(),
-                    'website_id'   => $websiteId,
-                    'website_code' => $websiteCode,
-                    'channel_code' => $channel,
-                    'lang'         => Mage::getStoreConfig(
-                        Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE,
-                        $store->getId()
-                    ),
-                    'currency'     => $store->getDefaultCurrencyCode(),
+                    'store_id'           => $storeId,
+                    'store_code'         => $storeCode,
+                    'is_website_default' => $isDefault,
+                    'siblings'           => $siblings,
+                    'website_id'         => $websiteId,
+                    'website_code'       => $websiteCode,
+                    'channel_code'       => $channel,
+                    'lang'               => $storeLang,
+                    'currency'           => $currency,
                 ];
             }
         }
@@ -131,30 +145,6 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
     }
 
     /**
-     * Retrieve all stores from website/channel mapping
-     *
-     * @return mixed[]
-     * @throws Exception
-     */
-    public function getMappedWebsitesStores()
-    {
-        /** @var string[] $mapping */
-        $mapping = $this->getConfigurationHelper()->getWebsiteMapping();
-        if (empty($mapping)) {
-            return [];
-        }
-
-        /** @var mixed[] $stores */
-        $stores = $this->getStores('website_code');
-        /** @var mixed[] $mappedWebsites */
-        $mappedWebsites = array_column($mapping, 'website');
-        $mappedWebsites = array_flip($mappedWebsites);
-        $mappedWebsites = array_intersect_key($stores, $mappedWebsites);
-
-        return $mappedWebsites;
-    }
-
-    /**
      * Retrieve needed store ids from website/channel mapping
      *
      * @return string[]
@@ -162,8 +152,8 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
      */
     public function getMappedWebsitesStoreIds()
     {
-        /** @var string[] $websites */
-        $websites = $this->getMappedWebsitesStores();
+        /** @var mixed[] $websites */
+        $websites = $this->getStores('website_code');
         /** @var string[] $storeIds */
         $storeIds = [];
         /** @var mixed[] $website */
@@ -184,8 +174,8 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
      */
     public function getMappedWebsitesStoreLangs()
     {
-        /** @var string[] $websites */
-        $websites = $this->getMappedWebsitesStores();
+        /** @var mixed[] $websites */
+        $websites = $this->getStores('website_code');
         /** @var string[] $langs */
         $langs = [];
         /** @var mixed[] $website */
@@ -196,6 +186,25 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
         }
 
         return $langs;
+    }
+
+    /**
+     * Get websites default stores
+     *
+     * @param bool $withAdmin
+     *
+     * @return string[]
+     */
+    public function getWebsiteDefaultStores($withAdmin = false)
+    {
+        /** @var Mage_Core_Model_Resource_Website $websiteResource */
+        $websiteResource = Mage::getResourceModel('core/website');
+        /** @var Varien_Db_Select $select */
+        $select = $websiteResource->getDefaultStoresSelect($withAdmin);
+        /** @var string[] $websiteDefaultStores */
+        $websiteDefaultStores = $websiteResource->getReadConnection()->fetchPairs($select);
+
+        return $websiteDefaultStores;
     }
 
     /**
