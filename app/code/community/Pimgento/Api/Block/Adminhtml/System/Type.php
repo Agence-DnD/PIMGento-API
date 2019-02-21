@@ -61,7 +61,7 @@ class Pimgento_Api_Block_Adminhtml_System_Type extends Mage_Adminhtml_Block_Syst
         /** @var Pimgento_Api_Block_Adminhtml_Source_Select_Type $renderer */
         $renderer = Mage::getBlockSingleton('pimgento_api/adminhtml_source_select_type');
         /** @var string $style */
-        $style = 'width:120px';
+        $style = 'style="width:120px"';
         $renderer->setId('type-select')->setClass('type-select')->setTitle('type-select')->setOptions($options)->setStyle($style);
 
         return $renderer;

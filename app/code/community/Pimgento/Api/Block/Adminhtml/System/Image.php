@@ -69,7 +69,7 @@ class Pimgento_Api_Block_Adminhtml_System_Image extends Mage_Adminhtml_Block_Sys
         /** @var Pimgento_Api_Block_Adminhtml_Source_Select_Image $renderer */
         $renderer = Mage::getBlockSingleton('pimgento_api/adminhtml_source_select_image');
         /** @var string $style */
-        $style = 'width:120px';
+        $style = 'style="width:120px"';
         $renderer->setId('attribute-select')->setClass('attribute-select')->setTitle('attribute-select')->setOptions(
             $options
         )->setStyle($style);

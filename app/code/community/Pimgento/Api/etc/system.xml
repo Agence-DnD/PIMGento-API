@@ -59,7 +59,8 @@
                         </pagination_size>
                         <admin_channel translate="label comment">
                             <label>Admin Website Channel</label>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_channel</source_model>
                             <comment>Set Magento Admin website default Pim channel</comment>
                             <validate>required-entry</validate>
                             <sort_order>40</sort_order>

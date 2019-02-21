@@ -19,17 +19,17 @@ class Pimgento_Api_Block_Adminhtml_System_Website extends Mage_Adminhtml_Block_S
     {
         /** @var Pimgento_Api_Helper_Data $helper */
         $helper = Mage::helper('pimgento_api');
-
+        /** @var Mage_Adminhtml_Block_Html_Select $renderer */
+        $renderer = $this->getChannelColumnRenderer();
         $this->addColumn(
             'channel',
             [
+                'renderer' => $renderer,
                 'label' => $helper->__('Channel'),
                 'class' => 'required-entry',
-                'style' => 'width:120px',
             ]
         );
 
-        /** @var Mage_Adminhtml_Block_Html_Select $renderer */
         $renderer = $this->getWebsiteColumnRenderer();
         $this->addColumn(
             'website',
@@ -43,6 +43,24 @@ class Pimgento_Api_Block_Adminhtml_System_Website extends Mage_Adminhtml_Block_S
         $this->_addButtonLabel = $helper->__('Add');
 
         parent::__construct();
+    }
+
+    /**
+     * Get channel column renderer
+     *
+     * @return Pimgento_Api_Block_Adminhtml_Source_Select
+     */
+    protected function getChannelColumnRenderer()
+    {
+        /** @var mixed[] $options */
+        $options = Mage::getSingleton('pimgento_api/adminhtml_system_config_source_channel')->toOptionArray();
+        /** @var Pimgento_Api_Block_Adminhtml_Source_Select_Channel $renderer */
+        $renderer = Mage::getBlockSingleton('pimgento_api/adminhtml_source_select_channel');
+        /** @var string $style */
+        $style = 'style="width:120px"';
+        $renderer->setClass('channel-select')->setTitle('channel-select')->setOptions($options)->setStyle($style);
+
+        return $renderer;
     }
 
     /**
@@ -68,7 +86,7 @@ class Pimgento_Api_Block_Adminhtml_System_Website extends Mage_Adminhtml_Block_S
         /** @var Pimgento_Api_Block_Adminhtml_Source_Select_Website $renderer */
         $renderer = Mage::getBlockSingleton('pimgento_api/adminhtml_source_select_website');
         /** @var string $style */
-        $style = 'width:120px';
+        $style = 'style="width:120px"';
         $renderer->setClass('website-select')->setTitle('website-select')->setOptions($options)->setStyle($style);
 
         return $renderer;
