@@ -203,6 +203,8 @@ class Pimgento_Api_Helper_Product extends Pimgento_Api_Helper_Entities
      */
     private function getKey($attribute, array $specifics)
     {
+        /** @var string $attribute */
+        $attribute = strtolower($attribute);
         if (isset($specifics['locale']) && isset($specifics['scope'])) {
             return sprintf('%s-%s-%s', $attribute, $specifics['locale'], $specifics['scope']);
         }
