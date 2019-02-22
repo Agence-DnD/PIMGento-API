@@ -546,6 +546,7 @@
                             <frontend_type>textarea</frontend_type>
                             <comment>
                                 <![CDATA[Build your query using a json.<br/>
+                            Please, ensure that your JSON format is valid before using advanced filter.<br/>
     For example :<br/>
     <pre>
     {
