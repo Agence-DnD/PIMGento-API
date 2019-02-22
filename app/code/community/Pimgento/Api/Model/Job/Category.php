@@ -387,9 +387,9 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
 
         /** @var mixed[] $values */
         $values = [
-            'is_active'       => new Zend_Db_Expr(1),
-            'include_in_menu' => new Zend_Db_Expr(1),
-            'is_anchor'       => new Zend_Db_Expr(1),
+            'is_active'       => new Zend_Db_Expr($this->getConfigurationHelper()->getIsCategoryActive()),
+            'include_in_menu' => new Zend_Db_Expr($this->getConfigurationHelper()->getIsCategoryInMenu()),
+            'is_anchor'       => new Zend_Db_Expr($this->getConfigurationHelper()->getIsCategoryAnchor()),
             'display_mode'    => new Zend_Db_Expr(sprintf('"%s"', Mage_Catalog_Model_Category::DM_PRODUCT)),
         ];
 

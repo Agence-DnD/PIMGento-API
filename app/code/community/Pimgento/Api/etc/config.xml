@@ -146,6 +146,9 @@
             </credentials>
             <category>
                 <cache_list>block_html,collections</cache_list>
+                <is_active>1</is_active>
+                <include_in_menu>1</include_in_menu>
+                <is_anchor>1</is_anchor>
             </category>
             <attribute>
                 <cache_list>block_html,collections,eav</cache_list>

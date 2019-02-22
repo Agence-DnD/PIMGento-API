@@ -191,6 +191,36 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </cache_list>
+                        <is_active translate="label comment">
+                            <label>Active categories</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Imported categories are active</comment>
+                            <sort_order>22</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </is_active>
+                        <include_in_menu translate="label comment">
+                            <label>Include in menu</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Imported categories are included in menu</comment>
+                            <sort_order>23</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </include_in_menu>
+                        <is_anchor translate="label comment">
+                            <label>Anchor categories</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Imported categories are anchor</comment>
+                            <sort_order>24</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </is_anchor>
                     </fields>
                 </category>
                 <attribute translate="label">
