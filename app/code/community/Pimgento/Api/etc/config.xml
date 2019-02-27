@@ -163,6 +163,7 @@
                 <mode>standard</mode>
                 <completeness_enabled>0</completeness_enabled>
                 <status>no_condition</status>
+                <updated_mode>SINCE LAST N DAYS</updated_mode>
             </products_filters>
         </pimgento_api>
     </default>

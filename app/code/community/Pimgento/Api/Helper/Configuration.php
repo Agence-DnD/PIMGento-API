@@ -247,11 +247,41 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productsFiltersFamilies = 'families';
     /**
+     * Product Filter Updated Mode config field
+     *
+     * @var string $productsFiltersUpdatedMode
+     */
+    private $productsFiltersUpdatedMode = 'updated_mode';
+    /**
+     * Product Filter Updated Lower config field
+     *
+     * @var string $productsFiltersUpdatedLower
+     */
+    private $productsFiltersUpdatedLower = 'updated_lower';
+    /**
+     * Product Filter Updated Greater config field
+     *
+     * @var string $productsFiltersUpdatedGreater
+     */
+    private $productsFiltersUpdatedGreater = 'updated_greater';
+    /**
+     * Product Filter Updated Between Upper config field
+     *
+     * @var string $productsFiltersUpdatedBetweenUpper
+     */
+    private $productsFiltersUpdatedBetweenAfter = 'updated_between_after';
+    /**
+     * Product Filter Updated Between Lower config field
+     *
+     * @var string $productsFiltersUpdatedBetweenLower
+     */
+    private $productsFiltersUpdatedBetweenBefore = 'updated_between_before';
+    /**
      * Product Filter Updated config field
      *
      * @var string $productsFiltersUpdated
      */
-    private $productsFiltersUpdated = 'updated';
+    private $productsFiltersUpdatedSince = 'updated';
     /**
      * Product Filter Advanced Filter config field
      *
@@ -899,13 +929,63 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Retrieve the updated filter
+     * Retrieve updated mode
      *
      * @return string
      */
-    public function getUpdatedFilter()
+    public function getUpdatedMode()
     {
-        return $this->getProductFilterConfigValue($this->productsFiltersUpdated);
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedMode);
+    }
+
+    /**
+     * Retrieve the updated before filter
+     *
+     * @return string
+     */
+    public function getUpdatedLowerFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedLower);
+    }
+
+    /**
+     * Retrieve the updated after filter
+     *
+     * @return string
+     */
+    public function getUpdatedGreaterFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedGreater);
+    }
+
+    /**
+     * Retrieve the updated after for between filter
+     *
+     * @return string
+     */
+    public function getUpdatedBetweenAfterFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedBetweenAfter);
+    }
+
+    /**
+     * Retrieve the = updated before for between filter
+     *
+     * @return string
+     */
+    public function getUpdatedBetweenBeforeFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedBetweenBefore);
+    }
+
+    /**
+     * Retrieve the updated since filter
+     *
+     * @return string
+     */
+    public function getUpdatedSinceFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedSince);
     }
 
     /**

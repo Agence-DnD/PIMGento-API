@@ -109,13 +109,47 @@ class Pimgento_Api_Helper_Filter_Product extends Mage_Core_Helper_Abstract
      */
     protected function addUpdatedFilter()
     {
-        /** @var string $filter */
-        $filter = $this->getConfigHelper()->getUpdatedFilter();
-        if (!is_numeric($filter)) {
-            return;
-        }
-        $this->getSearchBuilder()->addFilter('updated', 'SINCE LAST N DAYS', (int)$filter);
+        /** @var string $mode */
+        $mode = $this->getConfigHelper()->getUpdatedMode();
 
+        if ($mode == Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Update::BETWEEN) {
+            /** @var datetime $dateLower */
+            $dateAfter = $this->getConfigHelper()->getUpdatedBetweenAfterFilter() . ' 00:00:00';
+            /** @var datetime $dateUpper */
+            $dateBefore = $this->getConfigHelper()->getUpdatedBetweenBeforeFilter() . ' 23:59:59';
+            if (empty($dateAfter) || empty($dateBefore)) {
+                return;
+            }
+            /** @var datetime[] $dates */
+            $dates = [$dateAfter, $dateBefore];
+            $this->getSearchBuilder()->addFilter('updated', $mode, $dates);
+        }
+        if ($mode == Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Update::SINCE_LAST_N_DAYS) {
+            /** @var string $filter */
+            $filter = $this->getConfigHelper()->getUpdatedSinceFilter();
+            if (!is_numeric($filter)) {
+                return;
+            }
+            $this->getSearchBuilder()->addFilter('updated', $mode, (int)$filter);
+        }
+        if ($mode == Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Update::LOWER_THAN) {
+            /** @var string $date */
+            $date = $this->getConfigHelper()->getUpdatedLowerFilter();
+            if (empty($date)) {
+                return;
+            }
+            $date = $date . ' 23:59:59';
+        }
+        if ($mode == Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Update::GREATER_THAN) {
+            $date = $this->getConfigHelper()->getUpdatedGreaterFilter();
+            if (empty($date)) {
+                return;
+            }
+            $date = $date . ' 00:00:00';
+        }
+        if (!empty($date)) {
+            $this->getSearchBuilder()->addFilter('updated', $mode, $date);
+        }
         return;
     }
 

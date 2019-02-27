@@ -512,22 +512,91 @@
                                 <mode>standard</mode>
                             </depends>
                         </status>
-                        <updated translate="label comment">
-                            <label>Updated</label>
+                        <updated_mode>
+                            <label>Updated mode</label>
                             <sort_order>80</sort_order>
-                            <comment>
-                                <![CDATA[Import only product updated since last X days. Leave blank for no filter.]]>
-                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_update</source_model>
+                            <can_be_empty>0</can_be_empty>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <depends>
                                 <mode>standard</mode>
                             </depends>
+                        </updated_mode>
+                        <updated_lower translate="label comment">
+                            <label>Updated before</label>
+                            <sort_order>90</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>pimgento_api/adminhtml_system_config_date</frontend_model>
+                            <comment>Import only product updated before the given date. Leave blank for no filter.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                                <updated_mode>&lt;</updated_mode>
+                            </depends>
+                        </updated_lower>
+                        <updated_greater translate="label comment">
+                            <label>Updated after</label>
+                            <sort_order>100</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>pimgento_api/adminhtml_system_config_date</frontend_model>
+                            <comment>Import only product updated after the given date. Leave blank for no filter.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                                <updated_mode>&gt;</updated_mode>
+                            </depends>
+                        </updated_greater>
+                        <updated_between_after translate="label comment">
+                            <label>Updated after</label>
+                            <sort_order>130</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>pimgento_api/adminhtml_system_config_date</frontend_model>
+                            <comment>Import only product updated after the given date. Leave at least one blank for no filter.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                                <updated_mode>BETWEEN</updated_mode>
+                            </depends>
+                        </updated_between_after>
+                        <updated_between_before translate="label comment">
+                            <label>Updated before</label>
+                            <sort_order>140</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>pimgento_api/adminhtml_system_config_date</frontend_model>
+                            <comment>Import only product updated before the given date. Leave at least one blank for no filter.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                                <updated_mode>BETWEEN</updated_mode>
+                            </depends>
+                        </updated_between_before>
+                        <updated translate="label comment">
+                            <label>Updated since</label>
+                            <sort_order>150</sort_order>
+                            <comment>Import only product updated since last X days. Leave blank for no filter.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                                <updated_mode>SINCE LAST N DAYS</updated_mode>
+                            </depends>
                         </updated>
                         <families translate="label comment">
                             <label>Families</label>
-                            <sort_order>90</sort_order>
+                            <sort_order>160</sort_order>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>pimgento_api/adminhtml_system_config_source_filters_family</source_model>
                             <comment>
@@ -542,7 +611,7 @@
                         </families>
                         <advanced_filter translate="label comment">
                             <label>Advanced Filter</label>
-                            <sort_order>100</sort_order>
+                            <sort_order>170</sort_order>
                             <frontend_type>textarea</frontend_type>
                             <comment>
                                 <![CDATA[Build your query using a json.<br/>
