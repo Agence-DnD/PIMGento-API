@@ -741,7 +741,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                 continue;
             }
 
-            if (empty($columnParts[1]) && !isset($values[0][$columnPrefix])) {
+            if (empty($columnParts[1])) {
                 // No channel and no locale found: attribute scope naturally is Global
                 $values[0][$columnPrefix] = $column;
 
