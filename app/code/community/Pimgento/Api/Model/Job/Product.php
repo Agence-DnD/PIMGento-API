@@ -403,7 +403,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
             }
             /** @var string $associationName */
             foreach ($associationNames as $associationName) {
-                if (!empty($associationName) && $connection->tableColumnExists($productModelTable, $associationName)) {
+                if (!empty($associationName) && $connection->tableColumnExists($productModelTable, $associationName) && $connection->tableColumnExists($tmpTable, $associationName)) {
                     $data[$associationName] = sprintf('v.%s', $associationName);
                 }
             }
