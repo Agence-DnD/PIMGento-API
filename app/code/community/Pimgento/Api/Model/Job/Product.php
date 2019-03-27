@@ -80,6 +80,12 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
         'UPSELL',
         'X_SELL',
     ];
+    /**
+     * Product API filters
+     *
+     * @var mixed[] $filters
+     */
+    protected $filters = null;
 
     /**
      * Pimgento_Api_Model_Job_Product constructor
@@ -99,15 +105,28 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
      */
     public function createTable($task)
     {
+        /** @var Pimgento_Api_Helper_Data $helper */
+        $helper = $this->getHelper();
+        /** @var Pimgento_Api_Helper_Configuration $configHelper */
+        $configHelper = $this->getConfigurationHelper();
+        if (empty($configHelper->getMappedChannels())){
+            $task->stop($helper->__('No website/channel mapped. Please check your configurations.'));
+        }
+
+        /** @var mixed[] $filters */
+        $filters = $this->getFilters();
+        if(array_key_exists('error', $filters)){
+            $task->stop($filters['error']);
+        }
+        $filters = reset($filters);
+
         /** @var Akeneo\Pim\ApiClient\AkeneoPimClientInterface|Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface $client */
         $client = $this->getClient();
         /** @var \Akeneo\Pim\ApiClient\Pagination\PageInterface $products */
-        $products = $client->getProductApi()->listPerPage(1);
+        $products = $client->getProductApi()->listPerPage(1, false, $filters);
         /** @var mixed[] $product */
         $product = $products->getItems();
         $product = reset($product);
-        /** @var Pimgento_Api_Helper_Data $helper */
-        $helper = $this->getHelper();
         if (empty($product)) {
             $task->stop($helper->__('No results retrieved from Akeneo for %s import', $this->code));
         }
@@ -138,42 +157,64 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
      */
     public function insertData($task)
     {
-        /** @var Pimgento_Api_Helper_Filter_Product $filters */
-        $filters = Mage::helper('pimgento_api/filter_product');
+        /** @var mixed[] $filters */
+        $filters = $this->getFilters();
+        if(array_key_exists('error', $filters)){
+            $task->stop($filters['error']);
+        }
+
         /** @var Akeneo\Pim\ApiClient\AkeneoPimClientInterface|Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface $client */
         $client = $this->getClient();
         /** @var int $paginationSize */
         $paginationSize = $this->getConfigurationHelper()->getPaginationSize();
-        /** @var Akeneo\Pim\ApiClient\Pagination\ResourceCursorInterface $products */
-        $products = $client->getProductApi()->all($paginationSize, $filters->getFilters());
         /** @var Pimgento_Api_Model_Resource_Entities $resourceEntities */
         $resourceEntities = $this->getResourceEntities();
         /** @var Pimgento_Api_Helper_Product $productHelper */
         $productHelper = Mage::helper('pimgento_api/product');
 
-        /** @var int $index */
-        $index = 0;
-        /**
-         * @var int     $index
-         * @var mixed[] $product
-         */
-        foreach ($products as $index => $product) {
-            /** @var string[] $columns */
-            $columns = $productHelper->getColumnsFromResult($product);
-            /** @var bool $result */
-            $result = $resourceEntities->insertDataFromApi($columns);
-            if (!$result) {
-                $task->stop($this->getHelper()->__('Could not insert Product data in temp table'));
+        /** @var int $count */
+        $count = 0;
+        /** @var mixed[] $filter */
+        foreach ($filters as $filter) {
+            /** @var string $scope */
+            $scope = '';
+            if (!empty($filter['scope'])) {
+                $scope = $filter['scope'];
+            }
+
+            /** @var int $index */
+            $index = 0;
+            /** @var Akeneo\Pim\ApiClient\Pagination\ResourceCursorInterface $products */
+            $products = $client->getProductApi()->all($paginationSize, $filter);
+            /**
+             * @var int     $index
+             * @var mixed[] $product
+             */
+            foreach ($products as $index => $product) {
+                /** @var string[] $columns */
+                $columns = $productHelper->getColumnsFromResult($product);
+                /** @var bool $result */
+                $result = $resourceEntities->insertDataFromApi($columns);
+                if (!$result) {
+                    $task->stop($this->getHelper()->__('Could not insert Product data in temp table'));
+                }
+            }
+
+            if (!isset($index)) {
+                $task->setStepWarning($this->getHelper()->__('No Product data to insert in temp table for scope: %s', $scope));
+            }
+            if ($index) {
+                $count = $index;
             }
         }
-        if (!isset($index)) {
+
+        if (empty($count)) {
             $task->stop($this->getHelper()->__('No Product data to insert in temp table'));
         }
-        if ($index) {
-            $index++;
-        }
 
-        $task->setStepMessage($this->getHelper()->__('%d line(s) found', $index));
+        $count++;
+
+        $task->setStepMessage($this->getHelper()->__('%d line(s) found', $count));
     }
 
     /**
@@ -1683,5 +1724,25 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
     public function getExcludedColumns()
     {
         return $this->excludedColumns;
+    }
+
+    /**
+     * Retrieve product filters
+     *
+     * @return mixed[]
+     * @throws Mage_Core_Exception
+     */
+    protected function getFilters()
+    {
+        if (empty($this->filters)) {
+            /** @var Pimgento_Api_Helper_Filter_Product $filterHelper */
+            $filterHelper = Mage::helper('pimgento_api/filter_product');
+            /** @var mixed[] $filters */
+            $filters = $filterHelper->getFilters();
+
+            $this->filters = $filters;
+        }
+
+        return $this->filters;
     }
 }

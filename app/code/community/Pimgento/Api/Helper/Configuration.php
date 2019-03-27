@@ -211,12 +211,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productsFiltersCompletenessValue = 'completeness_value';
     /**
-     * Product Filter Completness Scope config field
-     *
-     * @var string $productsFiltersCompletenessScope
-     */
-    private $productsFiltersCompletenessScope = 'completeness_scope';
-    /**
      * Product Filter Completness Locales config field
      *
      * @var string $productsFiltersCompletenessLocales
@@ -418,40 +412,74 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Get Admin Website Default Channel from configuration
+     *
+     * @return string
+     */
+    public function getAdminDefaultChannel()
+    {
+        return $this->getGeneralConfigValue($this->adminWebsiteChannelConfigField);
+    }
+
+    /**
      * Retrieve website mapping
      *
+     * @param bool $withDefault
+     *
      * @return mixed[]
-     * @throws Exception
+     * @throws Mage_Core_Exception
      */
-    public function getWebsiteMapping()
+    public function getWebsiteMapping($withDefault = true)
     {
-        /** @var string $adminChannel */
-        $adminChannel = $this->getGeneralConfigValue($this->adminWebsiteChannelConfigField);
-        if (empty($adminChannel)) {
-            return [];
-        }
-        /** @var mixed[] $fullMapping */
-        $fullMapping = [
-            [
+        /** @var mixed[] $mapping */
+        $mapping = [];
+
+        if ($withDefault === true) {
+            /** @var string $adminChannel */
+            $adminChannel = $this->getAdminDefaultChannel();
+            if (empty($adminChannel)) {
+                return $mapping;
+            }
+
+            $mapping[] = [
                 'channel' => $adminChannel,
                 'website' => Mage::app()->getWebsite(0)->getCode(),
-            ],
-        ];
-        /** @var string $mapping */
-        $mapping = $this->getGeneralConfigValue($this->websiteMappingConfigField);
-        if (empty($mapping)) {
-            return $fullMapping;
+            ];
+        }
+
+        /** @var string $websiteMapping */
+        $websiteMapping = $this->getGeneralConfigValue($this->websiteMappingConfigField);
+        if (empty($websiteMapping)) {
+            return $mapping;
         }
 
         /** @var Mage_Core_Helper_UnserializeArray $unserializeHelper */
         $unserializeHelper = Mage::helper('core/unserializeArray');
-        /** @var mixed[] $mapping */
-        $mapping = $unserializeHelper->unserialize($mapping);
-        if (!empty($mapping) && is_array($mapping)) {
-            $fullMapping = array_merge($fullMapping, $mapping);
+        /** @var mixed[] $websiteMapping */
+        $websiteMapping = $unserializeHelper->unserialize($websiteMapping);
+        if (empty($websiteMapping) || !is_array($websiteMapping)) {
+            return $mapping;
         }
 
-        return $fullMapping;
+        $mapping = array_merge($mapping, $websiteMapping);
+
+        return $mapping;
+    }
+
+    /**
+     * Get mapped channels
+     *
+     * @return string[]
+     * @throws Mage_Core_Exception
+     */
+    public function getMappedChannels()
+    {
+        /** @var mixed[] $mapping */
+        $mapping = $this->getWebsiteMapping();
+        /** @var string[] $channels */
+        $channels = array_column($mapping, 'channel', 'channel');
+
+        return $channels;
     }
 
     /**
@@ -852,16 +880,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     public function getCompletenessValueFilter()
     {
         return $this->getProductFilterConfigValue($this->productsFiltersCompletenessValue);
-    }
-
-    /**
-     * Retrieve the scope to apply the completeness filter on
-     *
-     * @return string
-     */
-    public function getCompletenessScopeFilter()
-    {
-        return $this->getProductFilterConfigValue($this->productsFiltersCompletenessScope);
     }
 
     /**
