@@ -43,12 +43,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productFilterConfigGroup = 'products_filters';
     /**
-     * Logs config group
-     *
-     * @var string $logsConfigGroup
-     */
-    private $logsConfigGroup = 'logs';
-    /**
      * Akeneo Url config field
      *
      * @var string $baseUrlConfigField
@@ -84,12 +78,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      * @var string $passConfigField
      */
     private $passConfigField = 'pass';
-    /**
-     * Module log enabled config field
-     *
-     * @var string $logEnabledConfigField
-     */
-    private $logEnabledConfigField = 'log';
     /**
      * Import reindexation enabling select field
      *
