@@ -104,7 +104,7 @@
 "Pimgento_Api::Family Variant from PIM.","Familienvariante aus PIM."
 "Pimgento_Api::Family Variant","Familienvariante"
 "Pimgento_Api::Family","Familie"
-"Pimgento_Api::Fill configurable attributes with default value, leave blank to take simple product value or Product Model value if exists","Füllen Sie konfigurierbare Attribute mit einem Standardwert, lassen Sie das Feld leer, um einen einfachen Produktwert oder einen Produktmodellwert zu erhalten, falls vorhanden."
+"Pimgento_Api::Fill configurable attributes with default value, leave blank to take simple product value or Product Model value if exists. Value must be a chain between quotes or a SQL statement equaling a string","Füllen Sie konfigurierbare Attribute mit einem Standardwert, lassen Sie das Feld leer, um einen einfachen Produktwert oder einen Produktmodellwert zu erhalten, falls vorhanden. Der Wert muss eine SQL-Anweisung oder zwischen Anführungszeichen sein."
 "Pimgento_Api::Fill data into temporary table","Daten in die temporäre Tabelle eintragen"
 "Pimgento_Api::Fill temporary table","Füllen der temporären Tabelle"
 "Pimgento_Api::Found in your Akeneo configuration : System / API connections","In Ihrer Akeneo-Konfiguration zu finden: System / API-Verbindungen"

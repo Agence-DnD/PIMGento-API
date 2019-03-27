@@ -448,7 +448,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                 }
 
                 if (strlen($value) > 0) {
-                    $data[$column] = new Zend_Db_Expr(sprintf('"%s"', $value));
+                    $data[$column] = new Zend_Db_Expr($value);
 
                     continue;
                 }

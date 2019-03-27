@@ -322,7 +322,7 @@
                             <label>Configurable attributes</label>
                             <frontend_model>pimgento_api/adminhtml_system_configurable</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
-                            <comment>Fill configurable attributes with default value, leave blank to take simple product value or Product Model value if exists</comment>
+                            <comment>Fill configurable attributes with default value, leave blank to take simple product value or Product Model value if exists. Value must be a chain between quotes or a SQL statement equaling a string</comment>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
