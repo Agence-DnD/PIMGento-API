@@ -17,7 +17,10 @@ class Pimgento_Api_Helper_Entities extends Mage_Core_Helper_Abstract
      *
      * @var string[] EXCLUDED_COLUMNS
      */
-    const EXCLUDED_COLUMNS = ['_links'];
+    const EXCLUDED_COLUMNS = [
+        '_links',
+        'metadata',
+    ];
     /**
      * Catalog product entity type id
      *
