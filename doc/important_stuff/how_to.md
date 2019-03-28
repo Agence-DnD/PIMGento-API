@@ -26,10 +26,10 @@ composer require akeneo/api-php-client-ee:^3.0
 
 **A:** You can import your data using two different ways:
 
-* Using the [interface](doc/features/pimgento_interface.md)
-* Using cron [tasks](doc/features/pimgento_cron.md)
+* Using the [interface](../features/pimgento_interface.md)
+* Using cron [tasks](../features/pimgento_cron.md)
 
-But before using one of these methods be sure to read this [quick guide](doc/features/pimgento_import.md) about the import system.
+But before using one of these methods be sure to read this [quick guide](../features/pimgento_import.md) about the import system.
 
 ### Q: How to customize PIMGento (API)?
 

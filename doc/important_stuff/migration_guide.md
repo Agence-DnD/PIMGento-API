@@ -31,7 +31,7 @@ Use the 'Flush cache' button in your Magento Back-Office, or delete the magento/
 
 1. Download and copy PIMGento (API) source code from our [GitHub repository](https://github.com/Agence-DnD/PIMGento-API) into your Magento project.
 2. You will need [Composer](https://getcomposer.org/) in order to proceed ot next step: [getcomposer.org](https://getcomposer.org/)
-3. Install Akeneo API on your project. Please, check the ['How to...'](doc/important_stuff/how_to.md) section: How to install PIMGento (API)?
+3. Install Akeneo API on your project. Please, check the ['How to...'](how_to.md) section: How to install PIMGento (API)?
 
 ### Flush cache again:
 
@@ -39,11 +39,11 @@ Use the 'Flush cache' button in your Magento Back-Office, or delete the magento/
 
 ### Configure PIMGento (API) in Magento backend:
 
-Please, follow our configuration guide: [How to configure PIMGento (API)?](doc/important_stuff/how_to.md)
+Please, follow our configuration guide: [How to configure PIMGento (API)?](how_to.md)
 
 ### Re-import all entities:
     
-Please, follow our configuration guide: [How to import my data into PIMGento (API)?](doc/important_stuff/how_to.md)
+Please, follow our configuration guide: [How to import my data into PIMGento (API)?](how_to.md)
 
 ### Important notes:
 
