@@ -996,7 +996,7 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
         }
 
         /** @var mixed[] $filters */
-        $filters = json_decode($filters);
+        $filters = Mage::helper('core')->jsonDecode($filters);
 
         return (array)$filters;
     }
