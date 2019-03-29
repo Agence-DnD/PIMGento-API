@@ -22,5 +22,5 @@ Configuration is available in Magento back-office under:
 | Completeness type             | Choose your logical operator ex (Equals, Lower than...)                    |
 | Completeness value            | Fix the completeness level required for import                             |
 | Status                        | Choose the status of the products to import (Enabled, Disabled, No condition)|
-| Updated                       | Import products updated since last X days                                  |
+| Updated mode                  | Import products updated since last N days or between two dates or before a date or after a date |
 | Families                      | Select the families you don't want to retrieve products from               |
