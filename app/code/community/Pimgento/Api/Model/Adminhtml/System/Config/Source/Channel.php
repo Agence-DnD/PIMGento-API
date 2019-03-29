@@ -17,7 +17,7 @@ class Pimgento_Api_Model_Adminhtml_System_Config_Source_Channel
      *
      * @var array $options
      */
-    protected $options = [];
+    protected $options = [0 => ''];
 
     /**
      * Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Channel constructor

@@ -440,7 +440,7 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
         /** @var string $adminChannel */
         $adminChannel = $this->getGeneralConfigValue($this->adminWebsiteChannelConfigField);
         if (empty($adminChannel)) {
-            return [];
+            throw new Pimgento_Api_Exception($this->__('No channel found for Admin website channel configuration.'));
         }
         /** @var mixed[] $fullMapping */
         $fullMapping = [
