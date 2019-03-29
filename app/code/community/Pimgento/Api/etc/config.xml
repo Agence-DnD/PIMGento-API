@@ -134,7 +134,7 @@
         <pimgento_api>
             <general>
                 <akeneo_version>1</akeneo_version>
-                <pagination_size>10</pagination_size>
+                <pagination_size>100</pagination_size>
             </general>
             <credentials>
                 <base_url>http://demo.akeneo.com</base_url>
