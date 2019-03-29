@@ -49,7 +49,7 @@
                         </akeneo_version>
                         <pagination_size translate="label comment">
                             <label>Pagination size</label>
-                            <comment>Must be a value between 1 and 100. Default value is 10.</comment>
+                            <comment>Must be a value between 1 and 100. Default value is 100.</comment>
                             <frontend_type>text</frontend_type>
                             <validate>required-entry</validate>
                             <sort_order>30</sort_order>
@@ -191,6 +191,36 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </cache_list>
+                        <is_active translate="label comment">
+                            <label>Activate new categories</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Newly imported categories will be activated</comment>
+                            <sort_order>22</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </is_active>
+                        <include_in_menu translate="label comment">
+                            <label>Include new categories in menu</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Newly imported categories categories will be included in menu</comment>
+                            <sort_order>23</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </include_in_menu>
+                        <is_anchor translate="label comment">
+                            <label>Set new categories in anchor mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Newly imported categories will be in anchor mode</comment>
+                            <sort_order>24</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </is_anchor>
                     </fields>
                 </category>
                 <attribute translate="label">
@@ -322,7 +352,7 @@
                             <label>Configurable attributes</label>
                             <frontend_model>pimgento_api/adminhtml_system_configurable</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
-                            <comment>Fill configurable attributes with default value, leave blank to take simple product value or Product Model value if exists</comment>
+                            <comment>Fill configurable attributes with default value, leave blank to take simple product value or Product Model value if exists. Value must be a chain between quotes or an SQL statement.</comment>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -546,6 +576,7 @@
                             <frontend_type>textarea</frontend_type>
                             <comment>
                                 <![CDATA[Build your query using a json.<br/>
+                            Please, ensure that your JSON format is valid before using advanced filter.<br/>
     For example :<br/>
     <pre>
     {

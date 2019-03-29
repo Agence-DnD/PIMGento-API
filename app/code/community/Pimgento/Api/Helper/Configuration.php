@@ -145,6 +145,30 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productTaxIdConfigField = 'tax_id';
     /**
+     * Category config path
+     *
+     * @var string $categoryConfigGroup
+     */
+    private $categoryConfigGroup = 'category';
+    /**
+     * Is category active config field
+     *
+     * @var string $isCategoryActive
+     */
+    private $isCategoryActive = 'is_active';
+    /**
+     * Is category in menu config field
+     *
+     * @var string $isCategoryInMenu
+     */
+    private $isCategoryInMenu = 'include_in_menu';
+    /**
+     * Is category anchor config field
+     *
+     * @var string $isCategoryAnchor
+     */
+    private $isCategoryAnchor = 'is_anchor';
+    /**
      * Attribute config path
      *
      * @var string $attributeConfigGroup
@@ -541,6 +565,45 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Retrieve if categories must be active
+     *
+     * @return int
+     */
+    public function getIsCategoryActive()
+    {
+        /** @var string $configPath */
+        $configPath = sprintf('%s/%s/%s', $this->configSection, $this->categoryConfigGroup, $this->isCategoryActive);
+
+        return (int)$this->getConfigValue($configPath);
+    }
+
+    /**
+     * Retrieve if categories must be in menu
+     *
+     * @return int
+     */
+    public function getIsCategoryInMenu()
+    {
+        /** @var string $configPath */
+        $configPath = sprintf('%s/%s/%s', $this->configSection, $this->categoryConfigGroup, $this->isCategoryInMenu);
+
+        return (int)$this->getConfigValue($configPath);
+    }
+
+    /**
+     * Retrieve if categories must be anchor
+     *
+     * @return int
+     */
+    public function getIsCategoryAnchor()
+    {
+        /** @var string $configPath */
+        $configPath = sprintf('%s/%s/%s', $this->configSection, $this->categoryConfigGroup, $this->isCategoryAnchor);
+
+        return (int)$this->getConfigValue($configPath);
+    }
+
+    /**
      * Retrieve Additional Attribute Types config
      *
      * @return mixed[]
@@ -588,7 +651,7 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     {
         /** @var string $configPath */
         $configPath = sprintf('%s/%s/%s', $this->configSection, $this->attributeConfigGroup, $this->prefixReservedConfigField);
-        /** @var string $matches */
+        /** @var string $isEnabled */
         $isEnabled = $this->getConfigValue($configPath);
         if (empty($isEnabled)) {
             return false;
@@ -933,7 +996,7 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
         }
 
         /** @var mixed[] $filters */
-        $filters = json_decode($filters);
+        $filters = Mage::helper('core')->jsonDecode($filters);
 
         return (array)$filters;
     }

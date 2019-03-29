@@ -403,7 +403,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
             }
             /** @var string $associationName */
             foreach ($associationNames as $associationName) {
-                if (!empty($associationName) && $connection->tableColumnExists($productModelTable, $associationName)) {
+                if (!empty($associationName) && $connection->tableColumnExists($productModelTable, $associationName) && $connection->tableColumnExists($tmpTable, $associationName)) {
                     $data[$associationName] = sprintf('v.%s', $associationName);
                 }
             }
@@ -448,7 +448,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                 }
 
                 if (strlen($value) > 0) {
-                    $data[$column] = new Zend_Db_Expr(sprintf('"%s"', $value));
+                    $data[$column] = new Zend_Db_Expr($value);
 
                     continue;
                 }
@@ -741,7 +741,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                 continue;
             }
 
-            if (empty($columnParts[1]) && !isset($values[0][$columnPrefix])) {
+            if (empty($columnParts[1])) {
                 // No channel and no locale found: attribute scope naturally is Global
                 $values[0][$columnPrefix] = $column;
 

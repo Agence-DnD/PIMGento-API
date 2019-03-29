@@ -5,5 +5,5 @@ Configuration is available in Magento back-office under:
 
 | Configuration                 | Usage                                                                                  |
 |-------------------------------|----------------------------------------------------------------------------------------|
-| Pagination size               | Set pagination for all import (the default value is 10)                                |
+| Pagination size               | Set pagination for all import (the default value is 100)                               |
 | Website Mapping               | Mapping between PIMGento websites and Akeneo channels                                  |
