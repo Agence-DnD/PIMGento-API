@@ -143,7 +143,7 @@
 "Pimgento_Api::Match specific Pim attribute type with Magento any default field type","Correspondance des types d'attribut spécifique au PIM avec le type Magento pertinent"
 "Pimgento_Api::Media import is not enabled","L'import des media est désactivé"
 "Pimgento_Api::Mode","Mode"
-"Pimgento_Api::Must be a value between 1 and 100. Default value is 10.","Doit être une valeur entre 1 et 100. La valeur par défaut est 10."
+"Pimgento_Api::Must be a value between 1 and 100. Default value is 100.","Doit être une valeur entre 1 et 100. La valeur par défaut est 100."
 "Pimgento_Api::No Attribute data to insert in temp table","Aucune donnée d'attribut à insérer dans la table temporaire"
 "Pimgento_Api::No axes for code: %s","Aucun axe pour le code : %s"
 "Pimgento_Api::No cache to clear for import: %s","Aucun cache à vider pour l'import : %s"

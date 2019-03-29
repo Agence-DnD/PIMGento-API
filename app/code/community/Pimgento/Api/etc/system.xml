@@ -49,7 +49,7 @@
                         </akeneo_version>
                         <pagination_size translate="label comment">
                             <label>Pagination size</label>
-                            <comment>Must be a value between 1 and 100. Default value is 10.</comment>
+                            <comment>Must be a value between 1 and 100. Default value is 100.</comment>
                             <frontend_type>text</frontend_type>
                             <validate>required-entry</validate>
                             <sort_order>30</sort_order>
