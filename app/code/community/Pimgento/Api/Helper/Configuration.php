@@ -43,12 +43,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productFilterConfigGroup = 'products_filters';
     /**
-     * Logs config group
-     *
-     * @var string $logsConfigGroup
-     */
-    private $logsConfigGroup = 'logs';
-    /**
      * Akeneo Url config field
      *
      * @var string $baseUrlConfigField
@@ -84,12 +78,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      * @var string $passConfigField
      */
     private $passConfigField = 'pass';
-    /**
-     * Module log enabled config field
-     *
-     * @var string $logEnabledConfigField
-     */
-    private $logEnabledConfigField = 'log';
     /**
      * Import reindexation enabling select field
      *
@@ -247,12 +235,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productsFiltersCompletenessValue = 'completeness_value';
     /**
-     * Product Filter Completness Scope config field
-     *
-     * @var string $productsFiltersCompletenessScope
-     */
-    private $productsFiltersCompletenessScope = 'completeness_scope';
-    /**
      * Product Filter Completness Locales config field
      *
      * @var string $productsFiltersCompletenessLocales
@@ -271,11 +253,41 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productsFiltersFamilies = 'families';
     /**
+     * Product Filter Updated Mode config field
+     *
+     * @var string $productsFiltersUpdatedMode
+     */
+    private $productsFiltersUpdatedMode = 'updated_mode';
+    /**
+     * Product Filter Updated Lower config field
+     *
+     * @var string $productsFiltersUpdatedLower
+     */
+    private $productsFiltersUpdatedLower = 'updated_lower';
+    /**
+     * Product Filter Updated Greater config field
+     *
+     * @var string $productsFiltersUpdatedGreater
+     */
+    private $productsFiltersUpdatedGreater = 'updated_greater';
+    /**
+     * Product Filter Updated Between Upper config field
+     *
+     * @var string $productsFiltersUpdatedBetweenUpper
+     */
+    private $productsFiltersUpdatedBetweenAfter = 'updated_between_after';
+    /**
+     * Product Filter Updated Between Lower config field
+     *
+     * @var string $productsFiltersUpdatedBetweenLower
+     */
+    private $productsFiltersUpdatedBetweenBefore = 'updated_between_before';
+    /**
      * Product Filter Updated config field
      *
      * @var string $productsFiltersUpdated
      */
-    private $productsFiltersUpdated = 'updated';
+    private $productsFiltersUpdatedSince = 'updated';
     /**
      * Product Filter Advanced Filter config field
      *
@@ -454,40 +466,74 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Get Admin Website Default Channel from configuration
+     *
+     * @return string
+     */
+    public function getAdminDefaultChannel()
+    {
+        return $this->getGeneralConfigValue($this->adminWebsiteChannelConfigField);
+    }
+
+    /**
      * Retrieve website mapping
      *
+     * @param bool $withDefault
+     *
      * @return mixed[]
-     * @throws Exception
+     * @throws Mage_Core_Exception
      */
-    public function getWebsiteMapping()
+    public function getWebsiteMapping($withDefault = true)
     {
-        /** @var string $adminChannel */
-        $adminChannel = $this->getGeneralConfigValue($this->adminWebsiteChannelConfigField);
-        if (empty($adminChannel)) {
-            return [];
-        }
-        /** @var mixed[] $fullMapping */
-        $fullMapping = [
-            [
+        /** @var mixed[] $mapping */
+        $mapping = [];
+
+        if ($withDefault === true) {
+            /** @var string $adminChannel */
+            $adminChannel = $this->getAdminDefaultChannel();
+            if (empty($adminChannel)) {
+                return $mapping;
+            }
+
+            $mapping[] = [
                 'channel' => $adminChannel,
                 'website' => Mage::app()->getWebsite(0)->getCode(),
-            ],
-        ];
-        /** @var string $mapping */
-        $mapping = $this->getGeneralConfigValue($this->websiteMappingConfigField);
-        if (empty($mapping)) {
-            return $fullMapping;
+            ];
+        }
+
+        /** @var string $websiteMapping */
+        $websiteMapping = $this->getGeneralConfigValue($this->websiteMappingConfigField);
+        if (empty($websiteMapping)) {
+            return $mapping;
         }
 
         /** @var Mage_Core_Helper_UnserializeArray $unserializeHelper */
         $unserializeHelper = Mage::helper('core/unserializeArray');
-        /** @var mixed[] $mapping */
-        $mapping = $unserializeHelper->unserialize($mapping);
-        if (!empty($mapping) && is_array($mapping)) {
-            $fullMapping = array_merge($fullMapping, $mapping);
+        /** @var mixed[] $websiteMapping */
+        $websiteMapping = $unserializeHelper->unserialize($websiteMapping);
+        if (empty($websiteMapping) || !is_array($websiteMapping)) {
+            return $mapping;
         }
 
-        return $fullMapping;
+        $mapping = array_merge($mapping, $websiteMapping);
+
+        return $mapping;
+    }
+
+    /**
+     * Get mapped channels
+     *
+     * @return string[]
+     * @throws Mage_Core_Exception
+     */
+    public function getMappedChannels()
+    {
+        /** @var mixed[] $mapping */
+        $mapping = $this->getWebsiteMapping();
+        /** @var string[] $channels */
+        $channels = array_column($mapping, 'channel', 'channel');
+
+        return $channels;
     }
 
     /**
@@ -930,16 +976,6 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Retrieve the scope to apply the completeness filter on
-     *
-     * @return string
-     */
-    public function getCompletenessScopeFilter()
-    {
-        return $this->getProductFilterConfigValue($this->productsFiltersCompletenessScope);
-    }
-
-    /**
      * Retrieve the locales to apply the completeness filter on
      *
      * @return string
@@ -962,13 +998,63 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Retrieve the updated filter
+     * Retrieve updated mode
      *
      * @return string
      */
-    public function getUpdatedFilter()
+    public function getUpdatedMode()
     {
-        return $this->getProductFilterConfigValue($this->productsFiltersUpdated);
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedMode);
+    }
+
+    /**
+     * Retrieve the updated before filter
+     *
+     * @return string
+     */
+    public function getUpdatedLowerFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedLower);
+    }
+
+    /**
+     * Retrieve the updated after filter
+     *
+     * @return string
+     */
+    public function getUpdatedGreaterFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedGreater);
+    }
+
+    /**
+     * Retrieve the updated after for between filter
+     *
+     * @return string
+     */
+    public function getUpdatedBetweenAfterFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedBetweenAfter);
+    }
+
+    /**
+     * Retrieve the = updated before for between filter
+     *
+     * @return string
+     */
+    public function getUpdatedBetweenBeforeFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedBetweenBefore);
+    }
+
+    /**
+     * Retrieve the updated since filter
+     *
+     * @return string
+     */
+    public function getUpdatedSinceFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersUpdatedSince);
     }
 
     /**

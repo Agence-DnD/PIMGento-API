@@ -21,3 +21,7 @@ Remove metadata from temporary table
 
 Fix JSON method for advanced filter
 
+### 100.1.4 :
+Add new filters "Between", "After" and "Before" for updated product field
+
+Refactor API requests from configured mapping to improve performance and reduce data inserted in temporary table
