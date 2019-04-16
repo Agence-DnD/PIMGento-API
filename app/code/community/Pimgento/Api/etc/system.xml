@@ -475,23 +475,9 @@
                                 <mode>standard</mode>
                             </depends>
                         </completeness_enabled>
-                        <completeness_scope translate="label comment">
-                            <label>Completeness Channel</label>
-                            <sort_order>30</sort_order>
-                            <frontend_type>select</frontend_type>
-                            <source_model>pimgento_api/adminhtml_system_config_source_filters_channel</source_model>
-                            <comment>Select the channel to apply the completeness filter on</comment>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <depends>
-                                <completeness_enabled>1</completeness_enabled>
-                                <mode>standard</mode>
-                            </depends>
-                        </completeness_scope>
                         <completeness_type translate="label">
                             <label>Completeness type</label>
-                            <sort_order>40</sort_order>
+                            <sort_order>30</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>pimgento_api/adminhtml_system_config_source_filters_completeness</source_model>
                             <can_be_empty>0</can_be_empty>
@@ -505,13 +491,14 @@
                         </completeness_type>
                         <completeness_locales translate="label comment">
                             <label>Completeness Locales</label>
-                            <sort_order>50</sort_order>
+                            <sort_order>40</sort_order>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>pimgento_api/adminhtml_system_config_source_filters_locales</source_model>
                             <comment>Select the locales to apply the completeness filter on</comment>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <validate>required-entry</validate>
                             <depends>
                                 <completeness_enabled>1</completeness_enabled>
                                 <completeness_type separator=","><![CDATA[GREATER THAN ON ALL LOCALES,GREATER OR EQUALS THAN ON ALL LOCALES,LOWER THAN ON ALL LOCALES,LOWER OR EQUALS THAN ON ALL LOCALES]]></completeness_type>
@@ -520,11 +507,12 @@
                         </completeness_locales>
                         <completeness_value translate="label comment">
                             <label>Completeness value</label>
-                            <sort_order>60</sort_order>
+                            <sort_order>50</sort_order>
                             <comment>Has to be a value between 0 and 100</comment>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <validate>required-entry</validate>
                             <depends>
                                 <completeness_enabled>1</completeness_enabled>
                                 <mode>standard</mode>
@@ -532,7 +520,7 @@
                         </completeness_value>
                         <status translate="label">
                             <label>Status</label>
-                            <sort_order>70</sort_order>
+                            <sort_order>60</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>pimgento_api/adminhtml_system_config_source_filters_status</source_model>
                             <show_in_default>1</show_in_default>

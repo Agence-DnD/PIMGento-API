@@ -325,6 +325,23 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
         /* Create new table */
         /** @var Varien_Db_Ddl_Table $table */
         $table = $adapter->newTable($tableName);
+
+        $fields = array_diff($fields, ['identifier']);
+
+        $table->addColumn(
+            'identifier',
+            Varien_Db_Ddl_Table::TYPE_VARBINARY,
+            255,
+            [],
+            'identifier'
+        );
+
+        $table->addIndex(
+            'UNIQUE_IDENTIFIER',
+            'identifier',
+            ['type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE]
+        );
+
         /** @var string $field */
         foreach ($fields as $field) {
             if (empty($field)) {
@@ -432,6 +449,11 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
         if (empty($columns)) {
             return false;
         }
+
+        /** @var string[] $fields */
+        $fields = array_diff_key($columns, ['identifier' => null]);
+        $fields = array_keys($fields);
+
         /** @var string $tableName */
         $tableName = $this->getTableName();
         /** @var Varien_Db_Adapter_Interface $adapter */
@@ -444,7 +466,7 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
             $adapter->addColumn($tableName, $columnName, 'TEXT NULL');
         }
 
-        $adapter->insert($tableName, $columns);
+        $adapter->insertOnDuplicate($tableName, $columns, $fields);
 
         return true;
     }
@@ -537,9 +559,7 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
 
         /** @var string $maxCode */
         $maxCode = $adapter->fetchOne(
-            $adapter->select()
-                ->from($pimgentoTable, new Zend_Db_Expr(sprintf('MAX(`%s`)', $entitiesIdFieldName)))
-                ->where(
+            $adapter->select()->from($pimgentoTable, new Zend_Db_Expr(sprintf('MAX(`%s`)', $entitiesIdFieldName)))->where(
                     'import = ?',
                     $import
                 )

@@ -10,7 +10,7 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      https://pimgento.com/
  */
-class Pimgento_Api_Helper_Filter_Product extends Mage_Core_Helper_Abstract
+class Pimgento_Api_Helper_Filter_Product extends Pimgento_Api_Helper_Data
 {
     /**
      * Search Builder
@@ -18,30 +18,127 @@ class Pimgento_Api_Helper_Filter_Product extends Mage_Core_Helper_Abstract
      * @var \Akeneo\Pim\ApiClient\Search\SearchBuilder $searchBuilder
      */
     protected $searchBuilder = null;
-    
+    /**
+     * Configuration helper
+     *
+     * @var null $configHelper
+     */
+    protected $configHelper = null;
+
     /**
      * Get the filters for the product API query
      *
-     * @return array
+     * @return mixed[]|string[]
+     * @throws Mage_Core_Exception
      */
     public function getFilters()
     {
+        /** @var mixed[] $mappedChannels */
+        $mappedChannels = $this->getConfigHelper()->getMappedChannels();
+        if (empty($mappedChannels)) {
+            /** @var string[] $error */
+            $error = [
+                'error' => $this->__('No website/channel mapped. Please check your configurations.'),
+            ];
+
+            return $error;
+        }
+
+        /** @var mixed[] $filters */
+        $filters = [];
+        /** @var mixed[] $search */
+        $search = [];
+
         /** @var string $mode */
         $mode = $this->getConfigHelper()->getFilterMode();
         if ($mode == Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Mode::ADVANCED_VALUE) {
-            return $this->getConfigHelper()->getAdvancedFilters();
-        }
-        $this->addCompletenessFilter();
-        $this->addStatusFilter();
-        $this->addFamiliesFilter();
-        $this->addUpdatedFilter();
-        /** @var array $filters */
-        $filters = $this->getSearchBuilder()->getFilters();
-        if (empty($filters)) {
-            return [];
+            /** @var mixed[] $advancedFilters */
+            $advancedFilters = $this->getAdvancedFilters();
+            if (!empty($advancedFilters['scope'])) {
+                if (!in_array($advancedFilters['scope'], $mappedChannels)) {
+                    /** @var string[] $error */
+                    $error = [
+                        'error' => $this->__('Advanced filters contains an unauthorized scope, please add check your filters and website mapping.'),
+                    ];
+
+                    return $error;
+                }
+
+                return [$advancedFilters];
+            }
+
+            $search = $advancedFilters['search'];
         }
 
-        return ['search' => $filters];
+        if ($mode == Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Mode::STANDARD_VALUE) {
+            $this->addCompletenessFilter();
+            $this->addStatusFilter();
+            $this->addFamiliesFilter();
+            $this->addUpdatedFilter();
+            $search = $this->getSearchBuilder()->getFilters();
+        }
+
+        /** @var Pimgento_Api_Helper_Store $storeHelper */
+        $storeHelper = Mage::helper('pimgento_api/store');
+
+        /** @var string $channel */
+        foreach ($mappedChannels as $channel) {
+            /** @var string[] $filter */
+            $filter = [
+                'search' => $search,
+                'scope'  => $channel,
+            ];
+
+            if ($mode == Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Mode::ADVANCED_VALUE) {
+                $filters[] = $filter;
+
+                continue;
+            }
+
+            if ($this->getConfigHelper()->getCompletenessEnabled()) {
+                /** @var string[] $completeness */
+                $completeness = reset($search['completeness']);
+                if (!empty($completeness['scope']) && $completeness['scope'] !== $channel) {
+                    $completeness['scope']  = $channel;
+                    $search['completeness'] = [$completeness];
+
+                    $filter['search'] = $search;
+                }
+            }
+
+            /** @var string[] $locales */
+            $locales = $storeHelper->getChannelStoreLangs($channel);
+            if (!empty($locales)) {
+                /** @var Pimgento_Api_Helper_Locales $localesHelper */
+                $localesHelper = Mage::helper('pimgento_api/locales');
+                /** @var string $locales */
+                $akeneoLocales = $localesHelper->getAkeneoLocales();;
+                if(!empty($akeneoLocales)){
+                    $locales = array_intersect($locales, $akeneoLocales);
+                }
+
+                /** @var string $locales */
+                $locales           = implode(',', $locales);
+                $filter['locales'] = $locales;
+            }
+
+            $filters[] = $filter;
+        }
+
+        return $filters;
+    }
+
+    /**
+     * Retrieve advanced filters config
+     *
+     * @return mixed[]
+     */
+    protected function getAdvancedFilters()
+    {
+        /** @var mixed[] $filters */
+        $filters = $this->getConfigHelper()->getAdvancedFilters();
+
+        return $filters;
     }
 
     /**
@@ -55,28 +152,32 @@ class Pimgento_Api_Helper_Filter_Product extends Mage_Core_Helper_Abstract
             return;
         }
 
+        /** @var string $scope */
+        $scope = $this->getConfigHelper()->getAdminDefaultChannel();
+        /** @var mixed[] $options */
+        $options = ['scope' => $scope];
+
         /** @var string $filterType */
         $filterType = $this->getConfigHelper()->getCompletenessTypeFilter();
         /** @var string $filterValue */
         $filterValue = $this->getConfigHelper()->getCompletenessValueFilter();
-        /** @var mixed $locales */
-        $locales = $this->getConfigHelper()->getCompletenessLocalesFilter();
-        $locales = explode(',', $locales);
-        /** @var string $scope */
-        $scope = $this->getConfigHelper()->getCompletenessScopeFilter();
-        /** @var string[] $options */
-        $options = ['scope' => $scope];
 
-        /** @var array $localesType */
+        /** @var string[] $localesType */
         $localesType = [
             Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Completeness::LOWER_OR_EQUALS_THAN_ON_ALL_LOCALES,
             Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Completeness::LOWER_THAN_ON_ALL_LOCALES,
             Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Completeness::GREATER_THAN_ON_ALL_LOCALES,
-            Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Completeness::GREATER_OR_EQUALS_THAN_ON_ALL_LOCALES
+            Pimgento_Api_Model_Adminhtml_System_Config_Source_Filters_Completeness::GREATER_OR_EQUALS_THAN_ON_ALL_LOCALES,
         ];
+
         if (in_array($filterType, $localesType)) {
+            /** @var mixed $locales */
+            $locales = $this->getConfigHelper()->getCompletenessLocalesFilter();
+            /** @var string[] $locales */
+            $locales            = explode(',', $locales);
             $options['locales'] = $locales;
         }
+
         $this->getSearchBuilder()->addFilter('completeness', $filterType, $filterValue, $options);
 
         return;
@@ -165,6 +266,8 @@ class Pimgento_Api_Helper_Filter_Product extends Mage_Core_Helper_Abstract
         if (!$filter) {
             return;
         }
+
+        /** @var string[] $filter */
         $filter = explode(',', $filter);
 
         $this->getSearchBuilder()->addFilter('family', 'NOT IN', $filter);
@@ -185,8 +288,18 @@ class Pimgento_Api_Helper_Filter_Product extends Mage_Core_Helper_Abstract
 
             $this->searchBuilder = $clientHelper->getSearchBuilder();
         }
-        
+
         return $this->searchBuilder;
+    }
+
+    /**
+     * Get active product filter mode
+     *
+     * @return string
+     */
+    public function getFilterMode()
+    {
+        return $this->getConfigHelper()->getFilterMode();
     }
 
     /**
@@ -196,9 +309,13 @@ class Pimgento_Api_Helper_Filter_Product extends Mage_Core_Helper_Abstract
      */
     protected function getConfigHelper()
     {
-        /** @var Pimgento_Api_Helper_Configuration $configHelper */
-        $configHelper = Mage::helper('pimgento_api/configuration');
-        
-        return $configHelper;
+        if ($this->configHelper === null) {
+            /** @var Pimgento_Api_Helper_Configuration $configHelper */
+            $configHelper = Mage::helper('pimgento_api/configuration');
+
+            $this->configHelper = $configHelper;
+        }
+
+        return $this->configHelper;
     }
 }

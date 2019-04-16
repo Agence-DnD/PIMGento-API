@@ -145,6 +145,20 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
     }
 
     /**
+     * Retrieve all stores from website/channel mapping
+     *
+     * @return mixed[]
+     * @throws Exception
+     */
+    public function getMappedWebsitesStores()
+    {
+        /** @var mixed[] $stores */
+        $stores = $this->getStores('website_code');
+
+        return $stores;
+    }
+
+    /**
      * Retrieve needed store ids from website/channel mapping
      *
      * @return string[]
@@ -184,6 +198,40 @@ class Pimgento_Api_Helper_Store extends Mage_Core_Helper_Data
             $websiteStoreIds = array_column($website, 'lang');
             $langs           = array_merge($langs, array_diff($websiteStoreIds, $langs));
         }
+
+        return $langs;
+    }
+
+    /**
+     * Get given channel Magento languages
+     *
+     * @param $channel
+     *
+     * @return string[]
+     * @throws Mage_Core_Exception
+     */
+    public function getChannelStoreLangs($channel)
+    {
+        /** @var string[] $langs */
+        $langs = [];
+
+        if (empty($channel) || !in_array($channel, $this->getConfigurationHelper()->getMappedChannels())) {
+            return $langs;
+        }
+
+        /** @var mixed[] $stores */
+        $stores = $this->getStores('channel_code');
+        if (empty($stores)) {
+            return $langs;
+        }
+
+        /** @var mixed[] $channelStores */
+        $channelStores = $stores[$channel];
+        if (empty($channelStores)) {
+            return $langs;
+        }
+
+        $langs = array_column($channelStores, 'lang', 'lang');
 
         return $langs;
     }
