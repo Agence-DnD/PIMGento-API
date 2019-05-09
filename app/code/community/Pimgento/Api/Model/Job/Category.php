@@ -498,10 +498,8 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
         $isMagentoEnterprise = Mage::getEdition() === Mage::EDITION_ENTERPRISE;
 
         if ($isMagentoEnterprise) {
-            /** @var Mage_Core_Model_Factory $factory */
-            $factory = Mage::getSingleton('core/factory');
             /** @var Enterprise_Catalog_Model_Category_Redirect $redirect */
-            $redirect = $factory->getModel('enterprise_catalog/category_redirect');
+            $redirect = Mage::getModel('enterprise_catalog/category_redirect');
         }
 
         /**
@@ -553,9 +551,9 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
                     /** @var string $table */
                     $table = $resourceEntities->getValueTable('catalog/category', $urlAttribute['backend_type']);
 
-                    if (!$isMagentoEnterprise) {
-                        $adapter->insertOnDuplicate($table, $values);
+                    $adapter->insertOnDuplicate($table, $values);
 
+                    if (!$isMagentoEnterprise) {
                         continue;
                     }
 
@@ -574,15 +572,18 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
                         )->limit(1)
                     );
 
-                    if (empty($currentUrl) || $currentUrl != $newUrlKey) {
+                    if (empty($currentUrl) || $currentUrl === $newUrlKey) {
                         continue;
                     }
 
                     $categorySingleton->setId($row['entity_id']);
 
-                    $adapter->dropTemporaryTable(Enterprise_Catalog_Model_Category_Redirect::TMP_TABLE_NAME);
-
                     $redirect->saveCustomRedirects($categorySingleton, $storeValue['store_id']);
+
+                    // Force new connection in order to get temporary table and drop it
+                    /** @var Varien_Db_Adapter_Interface $dropAdapter */
+                    $dropAdapter = $resourceEntities->getReadConnection();
+                    $dropAdapter->dropTemporaryTable(Enterprise_Catalog_Model_Category_Redirect::TMP_TABLE_NAME);
                 }
             }
         }
