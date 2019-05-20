@@ -35,6 +35,7 @@ class Pimgento_Api_Helper_Family_Variant extends Pimgento_Api_Helper_Entities
          * @var mixed  $value
          */
         foreach ($result as $key => $value) {
+            $key = $this->keyToLowerCase($key);
             if (in_array($key, static::EXCLUDED_COLUMNS)) {
                 continue;
             }
