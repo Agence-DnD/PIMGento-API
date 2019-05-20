@@ -201,4 +201,27 @@ class Pimgento_Api_Helper_Entities extends Mage_Core_Helper_Abstract
 
         return (array)$columns;
     }
+
+    /**
+     * Set key to lower case
+     * to avoid problems with values import
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    public function keyToLowerCase($key)
+    {
+        /** @var string[] $keyParts */
+        $keyParts    = explode('-', $key, 2);
+        $keyParts[0] = strtolower($keyParts[0]);
+        /** @var string $newKey */
+        if (count($keyParts) > 1) {
+            $newKey = $keyParts[0].'-'.$keyParts[1];
+        } else {
+            $newKey = $keyParts[0];
+        }
+
+        return $newKey;
+    }
 }
