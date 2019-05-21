@@ -171,26 +171,25 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
         $resourceEntities = $this->getResourceEntities();
         /** @var Pimgento_Api_Helper_Product $productHelper */
         $productHelper = Mage::helper('pimgento_api/product');
+        /** @var int $index */
+        $index = 0;
 
-        /** @var int $count */
-        $count = 0;
         /** @var mixed[] $filter */
         foreach ($filters as $filter) {
             /** @var string $scope */
             $scope = '';
+            /** @var int $count */
+            $count = 0;
             if (!empty($filter['scope'])) {
                 $scope = $filter['scope'];
             }
-
-            /** @var int $index */
-            $index = 0;
             /** @var Akeneo\Pim\ApiClient\Pagination\ResourceCursorInterface $products */
             $products = $client->getProductApi()->all($paginationSize, $filter);
             /**
              * @var int     $index
              * @var mixed[] $product
              */
-            foreach ($products as $index => $product) {
+            foreach ($products as $product) {
                 /** @var string[] $columns */
                 $columns = $productHelper->getColumnsFromResult($product);
                 /** @var bool $result */
@@ -198,23 +197,21 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
                 if (!$result) {
                     $task->stop($this->getHelper()->__('Could not insert Product data in temp table'));
                 }
+
+                $index++;
+                $count++;
             }
 
-            if (!isset($index)) {
+            if (empty($count)) {
                 $task->setStepWarning($this->getHelper()->__('No Product data to insert in temp table for scope: %s', $scope));
-            }
-            if ($index) {
-                $count = $index;
             }
         }
 
-        if (empty($count)) {
+        if (empty($index)) {
             $task->stop($this->getHelper()->__('No Product data to insert in temp table'));
         }
 
-        $count++;
-
-        $task->setStepMessage($this->getHelper()->__('%d line(s) found', $count));
+        $task->setStepMessage($this->getHelper()->__('%d line(s) found', $index));
     }
 
     /**
