@@ -149,6 +149,9 @@ class Pimgento_Api_Helper_Product extends Pimgento_Api_Helper_Entities
                 // Attribute is a price
                 /** @var mixed[] $price */
                 foreach ($specifics['data'] as $price) {
+                    if (!array_key_exists('currency', $price) || !array_key_exists('amount', $price)) {
+                        continue;
+                    }
                     /** @var string $priceKey */
                     $priceKey             = sprintf('%s-%s', $key, $price['currency']);
                     $columns->{$priceKey} = $price['amount'];
