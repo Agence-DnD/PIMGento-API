@@ -211,4 +211,25 @@ abstract class Pimgento_Api_Model_Job_Abstract
             $this->getHelper()->__('Cache cleaned: %s', $cacheTypeList)
         );
     }
+
+    /**
+     * Check if all locales labels exists
+     *
+     * @param string[] $entity
+     * @param string[] $lang
+     * @param string $response
+     *
+     * @return string
+     */
+    public function checkLabelPerLocales(array $entity, array $lang, $response)
+    {
+        /** @var string[] $labels */
+        $labels = $entity['labels'];
+        foreach ($lang as $locale => $stores) {
+            if (empty($labels[$locale])) {
+                $response .= $this->getHelper()->__("Label for '%1' in %2 is missing. ", $entity['code'], $locale);
+            }
+        }
+        return $response;
+    }
 }

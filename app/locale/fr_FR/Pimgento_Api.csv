@@ -140,6 +140,7 @@
 "Pimgento_Api::Include new categories in menu","Inclure les nouvelles catégories au menu"
 "Pimgento_Api::Init default groups","Initialisation des groupes par défaut"
 "Pimgento_Api::Init stock","Initialisation du stock"
+"Pimgento_Api::Label for '%1' in %2 is missing. ","Le libellé pour '%1' sur la locale %2 est manquant. "
 "Pimgento_Api::Link configurable with children","Liaison des configuable aux enfants"
 "Pimgento_Api::Lower or equals than on all locales","Plus petit ou égal à sur toutes les locales"
 "Pimgento_Api::Lower or equals than","Plus petit ou égal à"
