@@ -79,11 +79,19 @@ class Pimgento_Api_Model_Job_Family extends Pimgento_Api_Model_Job_Abstract
         $entitiesHelper = Mage::helper('pimgento_api/entities');
         /** @var Pimgento_Api_Model_Resource_Entities $resourceEntities */
         $resourceEntities = $this->getResourceEntities();
+        /** @var string $warning */
+        $warning = '';
+        /** @var Pimgento_Api_Helper_Store $storeHelper */
+        $storeHelper = Mage::helper('pimgento_api/store');
         /**
          * @var int     $index
          * @var mixed[] $family
          */
         foreach ($familyItems as $index => $family) {
+            /** @var string[] $lang */
+            $lang = $storeHelper->getStores('lang');
+            /** @var string $checkLabels */
+            $warning = $this->checkLabelPerLocales($family, $lang, $warning);
             /** @var string[] $columns */
             $columns = $entitiesHelper->getColumnsFromResult($family);
             /** @var bool $result */
@@ -97,7 +105,7 @@ class Pimgento_Api_Model_Job_Family extends Pimgento_Api_Model_Job_Abstract
         }
         $index++;
 
-        $task->setStepMessage($this->getHelper()->__('%d line(s) found', $index));
+        $task->setStepMessage($this->getHelper()->__('%d line(s) found. %s', $index, $warning));
     }
 
     /**
