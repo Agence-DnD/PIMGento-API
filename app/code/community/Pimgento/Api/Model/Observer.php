@@ -89,34 +89,38 @@ class Pimgento_Api_Model_Observer
                         'method'  => 'pimgento_api/job_category::setLevel',
                     ],
                     6  => [
+                        'comment' => $helper->__('Remove Categories By Filter'),
+                        'method'  => 'pimgento_api/job_category::removeCategoriesByFilter',
+                    ],
+                    7  => [
                         'comment' => $helper->__('Prepare categories position'),
                         'method'  => 'pimgento_api/job_category::setPosition',
                     ],
-                    7  => [
+                    8  => [
                         'comment' => $helper->__('Create and update category entities'),
                         'method'  => 'pimgento_api/job_category::createEntities',
                     ],
-                    8  => [
+                    9  => [
                         'comment' => $helper->__('Set values to attributes'),
                         'method'  => 'pimgento_api/job_category::setValues',
                     ],
-                    9  => [
+                    10  => [
                         'comment' => $helper->__('Child categories count'),
                         'method'  => 'pimgento_api/job_category::updateChildrenCount',
                     ],
-                    10 => [
+                    11 => [
                         'comment' => $helper->__('Update URL keys'),
                         'method'  => 'pimgento_api/job_category::setUrlKey',
                     ],
-                    11 => [
+                    12 => [
                         'comment' => $helper->__('Drop temporary table'),
                         'method'  => 'pimgento_api/job_category::dropTable',
                     ],
-                    12 => [
+                    13 => [
                         'comment' => $helper->__('Reindex Data'),
                         'method'  => 'pimgento_api/job_category::reindex',
                     ],
-                    13 => [
+                    14 => [
                         'comment' => $helper->__('Clear cache'),
                         'method'  => 'pimgento_api/job_category::cleanCache',
                     ],

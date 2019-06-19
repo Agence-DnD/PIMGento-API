@@ -274,7 +274,62 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
     }
 
     /**
-     * Set categories position (Step 6)
+     * Remove categories from category filter configuration (Step 6)
+     *
+     * @param Task_Executor_Model_Task $task
+     *
+     * @return void
+     * @throws Pimgento_Api_Exception
+     */
+    public function removeCategoriesByFilter($task)
+    {
+        /** @var string|string[] $filteredCategories */
+        $filteredCategories = $this->getConfigurationHelper()->getCategoriesFilter();
+
+        if (!$filteredCategories || empty($filteredCategories)) {
+            $task->setStepWarning($this->getHelper()->__('No category to ignore'));
+            $task->setStepMessage($this->getHelper()->__('Step skipped.'));
+
+            return;
+        }
+
+        /** @var string $tableName */
+        $tableName = $this->getTableName();
+        /** @var Mage_Core_Model_Resource $resource */
+        $resource = Mage::getModel('core/resource');
+        /** @var Varien_Db_Adapter_Interface $adapter */
+        $adapter = $resource->getConnection(Mage_Core_Model_Resource::DEFAULT_WRITE_RESOURCE);
+
+        $filteredCategories = explode(',', $filteredCategories);
+
+        /** @var mixed[]|null $categoriesToDelete */
+        $categoriesToDelete = $adapter->fetchAll(
+            $adapter->select()->from($tableName)->where('code IN (?)', $filteredCategories)
+        );
+        if (!$categoriesToDelete) {
+            $task->setStepWarning($this->getHelper()->__('No category found'));
+            $task->setStepMessage($this->getHelper()->__('Step skipped.'));
+
+            return;
+        }
+
+        foreach ($categoriesToDelete as $category) {
+            if (!isset($category['_entity_id'])) {
+                continue;
+            }
+            $adapter->delete($tableName, ['path LIKE ?' => '%/' . $category['_entity_id'] . '/%']);
+            $adapter->delete($tableName,[
+                    'path LIKE ?'   => '%/' . $category['_entity_id'],
+                    'path NOT LIKE ?' => '%/' . $category['_entity_id'] . '%',
+                ]
+            );
+        }
+
+        $task->setStepMessage($this->getHelper()->__('Unwanted categories removed'));
+    }
+
+    /**
+     * Set categories position (Step 7)
      *
      * @param Task_Executor_Model_Task $task
      *
@@ -316,7 +371,7 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
     }
 
     /**
-     * Create category entities (Step 7)
+     * Create category entities (Step 8)
      *
      * @param Task_Executor_Model_Task $task
      *
@@ -369,7 +424,7 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
     }
 
     /**
-     * Set values to attributes (Step 8)
+     * Set values to attributes (Step 9)
      *
      * @param Task_Executor_Model_Task $task
      *
@@ -440,7 +495,7 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
     }
 
     /**
-     * Update Children Count (Step 9)
+     * Update Children Count (Step 10)
      *
      * @param Task_Executor_Model_Task $task
      *
@@ -467,7 +522,7 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
     }
 
     /**
-     * Set Url Keys (Step 10)
+     * Set Url Keys (Step 11)
      *
      * @param Task_Executor_Model_Task $task
      *
@@ -591,7 +646,7 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
     }
 
     /**
-     * Drop table (Step 11)
+     * Drop table (Step 12)
      *
      * @param Task_Executor_Model_Task $task
      *

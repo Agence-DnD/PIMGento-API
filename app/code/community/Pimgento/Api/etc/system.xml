@@ -627,9 +627,24 @@
                                 <mode>standard</mode>
                             </depends>
                         </families>
+                        <categories>
+                            <label>Categories</label>
+                            <sort_order>170</sort_order>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>pimgento_api/adminhtml_system_config_source_filters_category</source_model>
+                            <comment>
+                                <![CDATA[Select the categories you don't want to import.<br/> If the multiselect is empty, it means you don't have any categories in your Akeneo, or the provided credentials are wrong.]]>
+                            </comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>standard</mode>
+                            </depends>
+                        </categories>
                         <advanced_filter translate="label comment">
                             <label>Advanced Filter</label>
-                            <sort_order>170</sort_order>
+                            <sort_order>180</sort_order>
                             <frontend_type>textarea</frontend_type>
                             <comment>
                                 <![CDATA[Build your query using a json.<br/>
