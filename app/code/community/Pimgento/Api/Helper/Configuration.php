@@ -253,6 +253,12 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
      */
     private $productsFiltersFamilies = 'families';
     /**
+     * Product Filter Families config field
+     *
+     * @var string $productsFiltersFamilies
+     */
+    private $productsFiltersCategories = 'categories';
+    /**
      * Product Filter Updated Mode config field
      *
      * @var string $productsFiltersUpdatedMode
@@ -1065,6 +1071,16 @@ class Pimgento_Api_Helper_Configuration extends Mage_Core_Helper_Abstract
     public function getFamiliesFilter()
     {
         return $this->getProductFilterConfigValue($this->productsFiltersFamilies);
+    }
+
+    /**
+     * Retrieve the families to filter the products on
+     *
+     * @return string
+     */
+    public function getCategoriesFilter()
+    {
+        return $this->getProductFilterConfigValue($this->productsFiltersCategories);
     }
 
     /**
