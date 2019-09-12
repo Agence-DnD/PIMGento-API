@@ -633,7 +633,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
             $columnParts = explode('-', $column, 2);
             /** @var string $columnPrefix */
             $columnPrefix = reset($columnParts);
-            $columnPrefix = sprintf('%s_', $columnPrefix);
+            $columnPrefix = sprintf('%s', $columnPrefix);
             /** @var int $prefixLength */
             $prefixLength = strlen($columnPrefix) + 1;
             /** @var string $entitiesTable */
@@ -644,7 +644,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
             $subSelect = $connection->select()->from(
                 ['c' => $entitiesTable],
                 ['code' => sprintf('SUBSTRING(`c`.`code`, %s)', $prefixLength), 'entity_id' => 'c.entity_id']
-            )->where(sprintf('c.code LIKE "%s%s"', $columnPrefix, '%'))->where('c.import = ?', 'option');
+            )->where(sprintf('c.code LIKE "%s"', $columnPrefix))->where('c.import = ?', 'option');
 
             // if no option no need to continue process
             if (!$connection->query($subSelect)->rowCount()) {
