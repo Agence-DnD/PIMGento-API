@@ -271,10 +271,12 @@ class Task_Executor_Model_Task extends Varien_Object
      */
     public function setStepMessage($message)
     {
+        /** @var string $taskId */
+        $taskId = $this->getTaskId();
         /** @var int $stepNumber */
         $stepNumber = $this->getStepNumber();
         /** @var string $messageKey */
-        $messageKey = sprintf('message_step_%s', $stepNumber);
+        $messageKey = sprintf('%s_message_step_%s', $taskId, $stepNumber);
         /** @var string[] $stepMessage */
         $stepMessage = [
             'type'    => 'success',
@@ -292,10 +294,12 @@ class Task_Executor_Model_Task extends Varien_Object
      */
     public function getStepMessage()
     {
+        /** @var string $taskId */
+        $taskId = $this->getTaskId();
         /** @var int $stepNumber */
         $stepNumber = $this->getStepNumber();
         /** @var string $messageKey */
-        $messageKey = sprintf('message_step_%s', $stepNumber);
+        $messageKey = sprintf('%s_message_step_%s', $taskId, $stepNumber);
         /** @var string[] $stepMessage */
         $stepMessage = [
             'type'    => 'success',
@@ -320,8 +324,12 @@ class Task_Executor_Model_Task extends Varien_Object
         if (!is_string($message)) {
             return;
         }
+        /** @var string $taskId */
+        $taskId = $this->getTaskId();
+        /** @var int $stepNumber */
+        $stepNumber = $this->getStepNumber();
         /** @var string $stepKey */
-        $stepKey = sprintf('warning_step_%s', $this->getStepNumber());
+        $stepKey = sprintf('%s_warning_step_%s', $taskId, $stepNumber);
         /** @var mixed[] $warnings */
         $warnings   = $this->getStepWarnings();
         $warnings[] = [
@@ -338,8 +346,12 @@ class Task_Executor_Model_Task extends Varien_Object
      */
     public function getStepWarnings()
     {
+        /** @var string $taskId */
+        $taskId = $this->getTaskId();
+        /** @var int $stepNumber */
+        $stepNumber = $this->getStepNumber();
         /** @var string $stepKey */
-        $stepKey = sprintf('warning_step_%s', $this->getStepNumber());
+        $stepKey = sprintf('%s_warning_step_%s', $taskId, $stepNumber);
         /** @var string[] $warnings */
         $warnings = [];
         if (!empty($this->getData($stepKey))) {
