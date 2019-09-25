@@ -578,7 +578,7 @@ class Pimgento_Api_Model_Job_Category extends Pimgento_Api_Model_Job_Abstract
                         continue;
                     }
 
-                    $categorySingleton->setId($row['entity_id']);
+                    $categorySingleton->setId($row['_entity_id']);
 
                     $adapter->dropTemporaryTable(Enterprise_Catalog_Model_Category_Redirect::TMP_TABLE_NAME);
 
