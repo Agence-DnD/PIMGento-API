@@ -633,7 +633,7 @@ class Pimgento_Api_Model_Job_Product extends Pimgento_Api_Model_Job_Abstract
             $columnParts = explode('-', $column, 2);
             /** @var string $columnPrefix */
             $columnPrefix = reset($columnParts);
-            $columnPrefix = sprintf('%s_', $columnPrefix);
+            $columnPrefix = sprintf('%s-', $columnPrefix);
             /** @var int $prefixLength */
             $prefixLength = strlen($columnPrefix) + 1;
             /** @var string $entitiesTable */
