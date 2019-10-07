@@ -509,7 +509,7 @@ class Pimgento_Api_Model_Resource_Entities extends Mage_Core_Model_Resource_Db_A
             /** @var string $oldEntityCodeColumnName */
             $oldEntityCodeColumnName = sprintf('CONCAT(t.`%s`, "_", t.`%s`)', $prefix, $entityCode);
             /** @var string $update */
-            $update = 'UPDATE `' . $pimgentoTable . '` AS `e`, `' . $tableName . '` AS `t` SET e.code = ' . $entityCodeColumnName . ' WHERE e.code = ' . $oldEntityCodeColumnName;
+            $update = 'UPDATE `' . $pimgentoTable . '` AS `e`, `' . $tableName . '` AS `t` SET e.code = ' . $entityCodeColumnName . ' WHERE e.code = ' . $oldEntityCodeColumnName . ' AND e.`import` = "' . $import . '"';
 
             $adapter->query($update);
         }
