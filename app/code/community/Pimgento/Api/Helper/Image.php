@@ -77,6 +77,9 @@ class Pimgento_Api_Helper_Image extends Mage_Core_Helper_Data
         $ioAdapter->open(['path' => dirname($path)]);
         $ioAdapter->streamOpen(basename($path));
 
-        return $ioAdapter->streamWrite($binary);
+        $steamWrite = $ioAdapter->streamWrite($binary);
+        $ioAdapter->close();
+
+        return $steamWrite;
     }
 }
