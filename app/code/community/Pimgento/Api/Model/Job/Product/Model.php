@@ -92,7 +92,7 @@ class Pimgento_Api_Model_Job_Product_Model extends Pimgento_Api_Model_Job_Abstra
         $productModelCollection = $client->getProductModelApi()->listPerPage(1);
         /** @var Pimgento_Api_Helper_Data $helper */
         $helper = $this->getHelper();
-        if ($productModelCollection->getCount() === 0) {
+        if (!$productModelCollection->getCount()) {
             $task->stop($helper->__('No results retrieved from Akeneo'));
         }
         /** @var mixed[] $productModelItems */
